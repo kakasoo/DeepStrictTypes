@@ -2,7 +2,11 @@
     "name": "@kakasoo/deep-strict-types",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "files": [
+        "./bin/src"
+    ],
+    "main": "bin/src/index.js",
+    "types": "bin/src/index.d.ts",
     "scripts": {
         "build": "rimraf dist && tsc",
         "build:test": "rimraf bin && tsc -p test/tsconfig.json --watch",
