@@ -1,3 +1,9 @@
+# How To Use
+
+```bash
+npm i @kakasoo/deep-strict-types
+```
+
 # DeepStrictTypes
 
 **DeepStrictTypes** extends TypeScript utility types, enabling safe operations like `Omit` and `Pick` on nested objects or arrays by specifying the keys to be inferred. This allows for more strict and accurate type checks.
