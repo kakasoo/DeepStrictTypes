@@ -12,7 +12,7 @@ type Unbrand<T extends Primitive & Record<any, any>> = T extends string &
     ? Extract<null, Omit<T, any>>
     : T extends undefined & Record<any, any>
     ? Extract<undefined, Omit<T, any>>
-    : never;
+    : T;
 
 export type DeepStrictUnbrand<T> = T extends Array<Date>
     ? Array<Date>

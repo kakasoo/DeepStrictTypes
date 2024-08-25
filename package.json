@@ -15,7 +15,7 @@
         "build": "rimraf dist && tsc",
         "build:test": "rimraf bin && tsc -p test/tsconfig.json --watch",
         "prepare": "ts-patch install && typia patch",
-        "test": "node --watch bin/test/*.js"
+        "test": "node bin/test/index.js"
     },
     "keywords": [],
     "author": "",
