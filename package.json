@@ -2,6 +2,10 @@
     "name": "@kakasoo/deep-strict-types",
     "version": "1.0.0",
     "description": "",
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
     "files": [
         "./bin/src"
     ],
