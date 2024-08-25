@@ -1,0 +1,16 @@
+{
+    "name": "@kakasoo/deep-strict-types",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "rimraf dist && tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "rimraf": "^6.0.1",
+        "typescript": "^5.5.4"
+    }
+}
