@@ -4,13 +4,19 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "rimraf dist && tsc"
+        "build": "rimraf dist && tsc",
+        "build:test": "rimraf bin && tsc -p test/tsconfig.json --watch",
+        "prepare": "ts-patch install && typia patch",
+        "test": "node --watch bin/test/*.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "@types/node": "^22.5.0",
         "rimraf": "^6.0.1",
-        "typescript": "^5.5.4"
+        "ts-patch": "^3.2.1",
+        "typescript": "^5.5.2",
+        "typia": "^6.9.0"
     }
 }

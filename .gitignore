@@ -1,3 +1,9 @@
+# build files (src and test folder)
+bin
+
+# folder for publishing
+lib
+
 # Logs
 logs
 *.log

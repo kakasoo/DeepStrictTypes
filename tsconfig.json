@@ -1,7 +1,7 @@
 {
     "include": ["./src"],
     "compilerOptions": {
-        "outDir": "./dist",
+        "outDir": "./lib",
         "target": "es2016",
         "module": "commonjs",
         "esModuleInterop": true,
@@ -11,6 +11,12 @@
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "skipDefaultLibCheck": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "plugins": [
+            {
+                "transform": "typia/lib/transform"
+            }
+        ],
+        "strictNullChecks": true
     }
 }
