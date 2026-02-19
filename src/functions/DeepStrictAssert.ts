@@ -10,6 +10,8 @@ import { DeepStrictPick } from '../types/DeepStrictPick';
  *
  * This is the runtime counterpart of the {@link DeepStrictPick} type.
  *
+ * @deprecated Use {@link deepStrictPick} instead. This curried form will be removed in a future version.
+ *
  * @template T - The object type of the input
  * @param input - The source object to extract properties from
  * @returns A function that accepts a key path `K` and returns the deeply-picked result
