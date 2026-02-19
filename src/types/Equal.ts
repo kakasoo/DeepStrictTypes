@@ -1,7 +1,7 @@
 /**
  * Helper type that creates a generic function signature for type comparison.
  * This technique leverages TypeScript's strict function type checking to determine type equality.
- * 
+ *
  * @internal
  */
 type Expression<X> = <T>() => T extends X ? 1 : 2;
@@ -12,7 +12,7 @@ type Expression<X> = <T>() => T extends X ? 1 : 2;
  * The `Equal<X, Y>` type uses conditional types and a helper type `Expression<X>`
  * to determine if two types `X` and `Y` are exactly the same. It returns `true` if they are
  * equal, and `false` otherwise.
- * 
+ *
  * This type performs a strict equality check that distinguishes between:
  * - Union types with different members
  * - Branded types vs their base types

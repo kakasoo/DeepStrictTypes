@@ -25,7 +25,9 @@ type WithoutGlob<K extends string> = K extends '*' | `${string}.*` ? never : K;
 type ReturnType<
   Target extends object,
   Joiner extends { array: string; object: string } = { array: '[*]'; object: '.' },
-> = [Target] extends [never] ? [] : RemoveStartWithDot<Replace<WithoutGlob<DeepStrictObjectKeys<Target, Joiner, false>>>>[];
+> = [Target] extends [never]
+  ? []
+  : RemoveStartWithDot<Replace<WithoutGlob<DeepStrictObjectKeys<Target, Joiner, false>>>>[];
 
 /**
  * @title Runtime Function for Extracting All Nested Keys from an Object.

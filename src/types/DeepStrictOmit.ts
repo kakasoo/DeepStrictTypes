@@ -20,26 +20,26 @@ namespace DeepStrictOmit {
     : [K] extends [never]
       ? T
       : {
-        [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
-          ? key extends string
-            ? Element extends Date
+          [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
+            ? key extends string
+              ? Element extends Date
+                ? Array<Element>
+                : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
+                  ? Array<Infer<Element, GetElementMember<K, key>>>
+                  : Array<Element>
+              : never
+            : T[key] extends Array<infer Element>
               ? Array<Element>
-              : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
-                ? Array<Infer<Element, GetElementMember<K, key>>>
-                : Array<Element>
-            : never
-          : T[key] extends Array<infer Element>
-            ? Array<Element>
-            : T[key] extends object
-              ? key extends string
-                ? T[key] extends Date
-                  ? T[key]
-                  : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
-                    ? Infer<T[key], GetElementMember<K, key>>
-                    : T[key]
-                : never
-              : T[key];
-      };
+              : T[key] extends object
+                ? key extends string
+                  ? T[key] extends Date
+                    ? T[key]
+                    : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
+                      ? Infer<T[key], GetElementMember<K, key>>
+                      : T[key]
+                  : never
+                : T[key];
+        };
 }
 
 /**

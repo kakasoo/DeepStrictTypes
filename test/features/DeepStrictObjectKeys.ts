@@ -381,7 +381,10 @@ export function test_types_deep_strict_object_keys_object_array_union_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit' | 'prop[*].value' | 'prop[*].unit' | '*' | 'prop.*' | 'prop[*].*'>;
+  type Answer = Equal<
+    Question,
+    'prop' | 'other' | 'prop.value' | 'prop.unit' | 'prop[*].value' | 'prop[*].unit' | '*' | 'prop.*' | 'prop[*].*'
+  >;
   ok(typia.random<Answer>());
 }
 
@@ -723,7 +726,10 @@ export function test_types_deep_strict_object_keys_in_array_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit' | '[*].*' | '[*].prop[*].*'>;
+  type Answer = Equal<
+    Question,
+    '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit' | '[*].*' | '[*].prop[*].*'
+  >;
   ok(typia.random<Answer>());
 }
 
@@ -742,7 +748,10 @@ export function test_types_deep_strict_object_keys_in_array_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit' | '[*].*' | '[*].prop[*].*'>;
+  type Answer = Equal<
+    Question,
+    '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit' | '[*].*' | '[*].prop[*].*'
+  >;
   ok(typia.random<Answer>());
 }
 
@@ -763,7 +772,14 @@ export function test_types_deep_strict_object_keys_in_2d_array_unsafe() {
   >;
   type Answer = Equal<
     Question,
-    '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit' | '[*].[*].*' | '[*].[*].prop[*].*'
+    | '[*]'
+    | '[*].[*]'
+    | '[*].[*].prop'
+    | '[*].[*].other'
+    | '[*].[*].prop[*].value'
+    | '[*].[*].prop[*].unit'
+    | '[*].[*].*'
+    | '[*].[*].prop[*].*'
   >;
   ok(typia.random<Answer>());
 }
@@ -785,7 +801,14 @@ export function test_types_deep_strict_object_keys_in_2d_array_safe() {
   >;
   type Answer = Equal<
     Question,
-    '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit' | '[*].[*].*' | '[*].[*].prop[*].*'
+    | '[*]'
+    | '[*].[*]'
+    | '[*].[*].prop'
+    | '[*].[*].other'
+    | '[*].[*].prop[*].value'
+    | '[*].[*].prop[*].unit'
+    | '[*].[*].*'
+    | '[*].[*].prop[*].*'
   >;
   ok(typia.random<Answer>());
 }
