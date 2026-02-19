@@ -1,6 +1,25 @@
 import { DeepStrictObjectKeys } from '../types/DeepStrictObjectKeys';
 import { DeepStrictPick } from '../types/DeepStrictPick';
 
+/**
+ * @title Runtime Function for Type-Safe Deep Property Extraction.
+ *
+ * A curried function that takes an object and returns a picker function.
+ * The picker function accepts a dot-notation key path and returns a new object
+ * containing only the specified nested property, preserving the original structure.
+ *
+ * This is the runtime counterpart of the {@link DeepStrictPick} type.
+ *
+ * @template T - The object type of the input
+ * @param input - The source object to extract properties from
+ * @returns A function that accepts a key path `K` and returns the deeply-picked result
+ *
+ * @example
+ * ```ts
+ * const result = deepStrictAssert({ a: { b: 1, c: 2 } })('a.b');
+ * // result: { a: { b: 1 } }
+ * ```
+ */
 export const deepStrictAssert =
   <T extends object>(input: T) =>
   <K extends DeepStrictObjectKeys<T>>(key: K): DeepStrictPick<T, K> => {

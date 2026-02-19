@@ -71,9 +71,10 @@ namespace DeepStrictObjectKeys {
  * type Example1 = DeepStrictObjectKeys<{ a: { b: 1; c: 2 } }>; // "a" | "a.b" | "a.c"
  * type Example2 = DeepStrictObjectKeys<{ a: { b: 1; c: { d: number }[] } }>; // "a" | "a.b" | "a.c" | "a.c[*].d"
  * ```
- * @template Target Destination type for which you want to pull a key
- * @template Joiner It means what symbol to connect when recursively spinning superimposed types.
- * @template IsSafe When a key is a combination type of a primitive type and an object, it means whether to perform a recursive search or not.
+ * @template Target - The object type to extract nested keys from
+ * @template Joiner - Defines the separator symbols for joining nested paths. `array` is used for array access (default `'[*]'`), `object` is used for object access (default `'.'`).
+ * @template IsSafe - When `true`, stops at union types that mix primitives and objects without recursing into them. When `false`, recursively explores all branches of such union types.
+ * @returns A union of all dot-notation key paths in `Target`
  */
 export type DeepStrictObjectKeys<
   Target extends object,

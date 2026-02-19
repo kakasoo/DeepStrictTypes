@@ -1,10 +1,22 @@
 /**
- * @title The type that draws only objects from key names that infer members.
+ * @title Type for Stripping the Array Symbol Suffix from a Key String.
  *
- * It is a helper type for use in other types, a type that cuts the back string to infer objects among keys inferred as {@link DeepStrictObjectKeys}.
+ * A helper type that removes the trailing array symbol (default `[*]`) from a key string.
+ * Used internally by {@link GetType} and other types to extract the base property name
+ * from keys that include array notation.
  *
- * ```ts
- * type Example = RemoveArraySymbol<"a[]">; // a
+ * If the string does not end with the array symbol, it is returned unchanged.
+ *
+ * @template T - The key string to process
+ * @template ArraySymbol - The array symbol to strip (defaults to `[*]`)
+ * @returns The key string with the trailing array symbol removed, or the original string if no match
+ *
+ * @example
+ * ```typescript
+ * type Ex1 = RemoveArraySymbol<"items[*]">; // "items"
+ * type Ex2 = RemoveArraySymbol<"items">; // "items"
+ * type Ex3 = RemoveArraySymbol<"[*]">; // ""
+ * type Ex4 = RemoveArraySymbol<"data[]", "[]">; // "data"
  * ```
  */
 export type RemoveArraySymbol<

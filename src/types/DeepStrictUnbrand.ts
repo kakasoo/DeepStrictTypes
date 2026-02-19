@@ -1,5 +1,19 @@
 namespace DeepStrictUnbrand {
+  /**
+   * @internal Union of all JavaScript primitive types.
+   * Used to detect branded primitives (primitives intersected with `Record<any, any>`).
+   */
   export type Primitive = string | number | boolean | symbol | null | undefined;
+
+  /**
+   * @internal Strips branding from a single branded primitive type.
+   *
+   * A "branded primitive" is a type like `string & { __brand: 'email' }`.
+   * This type pattern-matches the base primitive and returns it without the brand.
+   *
+   * @template T - A branded primitive type (must extend both `Primitive` and `Record<any, any>`)
+   * @returns The underlying primitive type with branding removed
+   */
   export type Infer<T extends Primitive & Record<any, any>> = T extends string & Record<any, any>
     ? string
     : T extends number & Record<any, any>

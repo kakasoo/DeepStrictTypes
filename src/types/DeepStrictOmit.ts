@@ -2,6 +2,19 @@ import type { DeepStrictObjectKeys } from './DeepStrictObjectKeys';
 import type { GetElementMember } from './GetMember';
 
 namespace DeepStrictOmit {
+  /**
+   * @internal Recursively omits keys from a non-array object type.
+   *
+   * Handles three cases for each property:
+   * - Array of objects: recurses into array elements using {@link GetElementMember} to extract sub-keys
+   * - Object (non-Date): recurses into the nested object
+   * - Primitive / Date / array of primitives: preserves as-is
+   *
+   * Top-level keys that exactly match `K` are removed via the `as` clause.
+   *
+   * @template T - The object type to omit keys from
+   * @template K - The dot-notation key paths to omit (must be valid keys of `T`)
+   */
   export type Infer<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
     ? T
     : {
