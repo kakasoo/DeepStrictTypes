@@ -19,10 +19,13 @@ type Replace<S extends string> = S extends '[*]'
  * Converts type-level keys (with `[*]` notation) to runtime-friendly keys (with `${number}` notation),
  * strips leading dots, and wraps the result in an array type.
  */
+/** @internal Removes glob patterns (e.g., `'*'`, `'a.*'`) from a string union. */
+type WithoutGlob<K extends string> = K extends '*' | `${string}.*` ? never : K;
+
 type ReturnType<
   Target extends object,
   Joiner extends { array: string; object: string } = { array: '[*]'; object: '.' },
-> = [Target] extends [never] ? [] : RemoveStartWithDot<Replace<DeepStrictObjectKeys<Target, Joiner, false>>>[];
+> = [Target] extends [never] ? [] : RemoveStartWithDot<Replace<WithoutGlob<DeepStrictObjectKeys<Target, Joiner, false>>>>[];
 
 /**
  * @title Runtime Function for Extracting All Nested Keys from an Object.

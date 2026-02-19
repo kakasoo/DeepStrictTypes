@@ -113,7 +113,7 @@ export function test_types_deep_strict_object_keys_date_props_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -132,7 +132,7 @@ export function test_types_deep_strict_object_keys_date_props_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -151,7 +151,7 @@ export function test_types_deep_strict_object_keys_union_date_string_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -170,7 +170,7 @@ export function test_types_deep_strict_object_keys_union_date_string_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -189,7 +189,7 @@ export function test_types_deep_strict_object_keys_branding_string_typia_unsafe(
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -208,7 +208,7 @@ export function test_types_deep_strict_object_keys_branding_string_typia_safe() 
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -228,7 +228,7 @@ export function test_types_deep_strict_object_keys_array_branding_string_typia_u
     false
   >;
 
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -247,7 +247,7 @@ export function test_types_deep_strict_object_keys_array_branding_string_typia_s
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -266,7 +266,7 @@ export function test_types_deep_strict_object_keys_branding_string_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -285,7 +285,7 @@ export function test_types_deep_strict_object_keys_branding_string_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -304,7 +304,7 @@ export function test_types_deep_strict_object_keys_primitive_object_union_unsafe
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit' | '*' | 'prop.*'>;
   ok(typia.random<Answer>());
 }
 
@@ -323,7 +323,7 @@ export function test_types_deep_strict_object_keys_primitive_object_union_safe()
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -343,7 +343,7 @@ export function test_types_deep_strict_object_keys_primitive_array_union_unsafe(
     false
   >;
 
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].value' | 'prop[*].unit'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].value' | 'prop[*].unit' | '*' | 'prop[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -362,7 +362,7 @@ export function test_types_deep_strict_object_keys_primitive_array_union_safe() 
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -381,7 +381,7 @@ export function test_types_deep_strict_object_keys_object_array_union_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit' | 'prop[*].value' | 'prop[*].unit'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit' | 'prop[*].value' | 'prop[*].unit' | '*' | 'prop.*' | 'prop[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -400,7 +400,7 @@ export function test_types_deep_strict_object_keys_object_array_union_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -419,7 +419,7 @@ export function test_types_deep_strict_object_keys_nested_object_2_depth_unsafe(
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit' | '*' | 'prop.*'>;
   ok(typia.random<Answer>());
 }
 
@@ -438,7 +438,7 @@ export function test_types_deep_strict_object_keys_nested_object_2_depth_safe() 
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop.value' | 'prop.unit' | '*' | 'prop.*'>;
   ok(typia.random<Answer>());
 }
 
@@ -473,6 +473,9 @@ export function test_types_deep_strict_object_keys_nested_object_3_depth_unsafe(
     | 'prop.country'
     | 'prop.country.name' // depth 3
     | 'prop.country.location'
+    | '*'
+    | 'prop.*'
+    | 'prop.country.*'
   >;
   ok(typia.random<Answer>());
 }
@@ -508,6 +511,9 @@ export function test_types_deep_strict_object_keys_nested_object_3_depth_safe() 
     | 'prop.country'
     | 'prop.country.name' // depth 3
     | 'prop.country.location'
+    | '*'
+    | 'prop.*'
+    | 'prop.country.*'
   >;
   ok(typia.random<Answer>());
 }
@@ -527,7 +533,7 @@ export function test_types_deep_strict_object_keys_array_property_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -546,7 +552,7 @@ export function test_types_deep_strict_object_keys_array_property_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -565,7 +571,7 @@ export function test_types_deep_strict_object_keys_union_array_property_unsafe()
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -584,7 +590,7 @@ export function test_types_deep_strict_object_keys_union_array_property_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -603,7 +609,7 @@ export function test_types_deep_strict_object_keys_array_branding_string_propert
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -622,7 +628,7 @@ export function test_types_deep_strict_object_keys_array_branding_string_propert
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -641,7 +647,7 @@ export function test_types_deep_strict_object_keys_array_branding_string_typia_p
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -660,7 +666,7 @@ export function test_types_deep_strict_object_keys_array_branding_string_typia_p
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other'>;
+  type Answer = Equal<Question, 'prop' | 'other' | '*'>;
   ok(typia.random<Answer>());
 }
 
@@ -679,7 +685,7 @@ export function test_types_deep_strict_object_keys_array_object_branding_unsafe(
     },
     false
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].unit' | 'prop[*].value'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].unit' | 'prop[*].value' | '*' | 'prop[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -698,7 +704,7 @@ export function test_types_deep_strict_object_keys_array_object_branding_safe() 
     },
     true
   >;
-  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].unit' | 'prop[*].value'>;
+  type Answer = Equal<Question, 'prop' | 'other' | 'prop[*].unit' | 'prop[*].value' | '*' | 'prop[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -717,7 +723,7 @@ export function test_types_deep_strict_object_keys_in_array_unsafe() {
     },
     false
   >;
-  type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit'>;
+  type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit' | '[*].*' | '[*].prop[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -736,7 +742,7 @@ export function test_types_deep_strict_object_keys_in_array_safe() {
     },
     true
   >;
-  type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit'>;
+  type Answer = Equal<Question, '[*]' | '[*].prop' | '[*].other' | '[*].prop[*].value' | '[*].prop[*].unit' | '[*].*' | '[*].prop[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -757,7 +763,7 @@ export function test_types_deep_strict_object_keys_in_2d_array_unsafe() {
   >;
   type Answer = Equal<
     Question,
-    '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit'
+    '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit' | '[*].[*].*' | '[*].[*].prop[*].*'
   >;
   ok(typia.random<Answer>());
 }
@@ -779,7 +785,7 @@ export function test_types_deep_strict_object_keys_in_2d_array_safe() {
   >;
   type Answer = Equal<
     Question,
-    '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit'
+    '[*]' | '[*].[*]' | '[*].[*].prop' | '[*].[*].other' | '[*].[*].prop[*].value' | '[*].[*].prop[*].unit' | '[*].[*].*' | '[*].[*].prop[*].*'
   >;
   ok(typia.random<Answer>());
 }
@@ -862,7 +868,7 @@ export function test_types_deep_strict_object_keys_array_object_a_number_unsafe(
     },
     false
   >;
-  type Answer = Equal<Question, '[*]' | '[*].a'>;
+  type Answer = Equal<Question, '[*]' | '[*].a' | '[*].*'>;
   ok(typia.random<Answer>());
 }
 
@@ -880,6 +886,60 @@ export function test_types_deep_strict_object_keys_array_object_a_number_safe() 
     },
     true
   >;
-  type Answer = Equal<Question, '[*]' | '[*].a'>;
+  type Answer = Equal<Question, '[*]' | '[*].a' | '[*].*'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys includes glob '*' for flat objects.
+ */
+export function test_types_deep_strict_object_keys_glob_flat() {
+  type Keys = DeepStrictObjectKeys<{ a: 1; b: 2 }>;
+  type Answer = Equal<'*' extends Keys ? true : false, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys includes 'a.*' for nested objects.
+ */
+export function test_types_deep_strict_object_keys_glob_nested() {
+  type Keys = DeepStrictObjectKeys<{ a: { b: 1; c: 2 } }>;
+  type Answer = Equal<'a.*' extends Keys ? true : false, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys includes 'items[*].*' for array of objects.
+ */
+export function test_types_deep_strict_object_keys_glob_array() {
+  type Keys = DeepStrictObjectKeys<{ items: { id: number }[] }>;
+  type Answer = Equal<'items[*].*' extends Keys ? true : false, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys includes '[*].*' for root-level arrays.
+ */
+export function test_types_deep_strict_object_keys_glob_root_array() {
+  type Keys = DeepStrictObjectKeys<{ a: 1 }[]>;
+  type Answer = Equal<'[*].*' extends Keys ? true : false, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys does NOT include '*' for empty objects.
+ */
+export function test_types_deep_strict_object_keys_glob_empty() {
+  type Keys = DeepStrictObjectKeys<{}>;
+  type Answer = Equal<'*' extends Keys ? true : false, false>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys includes 'a.b.*' for deeply nested objects.
+ */
+export function test_types_deep_strict_object_keys_glob_deep_nested() {
+  type Keys = DeepStrictObjectKeys<{ a: { b: { c: 1; d: 2 } } }>;
+  type Answer = Equal<'a.b.*' extends Keys ? true : false, true>;
   ok(typia.random<Answer>());
 }

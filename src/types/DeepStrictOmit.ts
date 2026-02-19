@@ -15,9 +15,11 @@ namespace DeepStrictOmit {
    * @template T - The object type to omit keys from
    * @template K - The dot-notation key paths to omit (must be valid keys of `T`)
    */
-  export type Infer<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
-    ? T
-    : {
+  export type Infer<T extends object, K extends DeepStrictObjectKeys<T>> = '*' extends K
+    ? {}
+    : [K] extends [never]
+      ? T
+      : {
         [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
           ? key extends string
             ? Element extends Date
@@ -57,8 +59,11 @@ namespace DeepStrictOmit {
  * type Example3 = DeepStrictOmit<{ a: 1 }[], "[*].a">; // {}[]
  * ```
  */
-export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
-  T extends Array<infer Element extends object>
+export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = '*' extends K
+  ? T extends Array<any>
+    ? never[]
+    : {}
+  : T extends Array<infer Element extends object>
     ? Array<
         DeepStrictOmit<
           Element,

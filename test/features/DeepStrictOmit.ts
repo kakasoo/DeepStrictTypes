@@ -197,3 +197,21 @@ export function test_types_deep_strict_omit_simple_single() {
   type IsAnswer = Equal<Question, { b: string }>;
   ok(typia.random<IsAnswer>());
 }
+
+/**
+ * Tests that DeepStrictOmit with '*' returns empty object.
+ */
+export function test_types_deep_strict_omit_glob_all() {
+  type Question = DeepStrictOmit<{ a: number; b: string }, '*'>;
+  type IsAnswer = Equal<Question, {}>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit with 'a.*' omits all children of a.
+ */
+export function test_types_deep_strict_omit_glob_nested() {
+  type Question = DeepStrictOmit<{ a: { b: 1; c: 2 }; d: 3 }, 'a.*'>;
+  type IsAnswer = Equal<Question, { a: {}; d: 3 }>;
+  ok(typia.random<IsAnswer>());
+}

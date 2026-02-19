@@ -7,6 +7,7 @@ export * from './DeepStrictPick';
 export * from './DeepStrictUnbrand';
 export * from './ElementOf';
 export * from './Equal';
+export * from './ExpandGlob';
 export * from './GetMember';
 export * from './GetType';
 export * from './IsAny';

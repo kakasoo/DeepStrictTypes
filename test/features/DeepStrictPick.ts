@@ -130,3 +130,51 @@ export function test_types_deep_strict_pick_all_keys() {
   type Answer = Equal<Question, { a: number; b: string }>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that DeepStrictPick with '*' returns the full object.
+ */
+export function test_types_deep_strict_pick_glob_all() {
+  type Question = DeepStrictPick<{ a: number; b: string }, '*'>;
+  type Answer = Equal<Question, { a: number; b: string }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick with 'a.*' picks the entire nested object.
+ */
+export function test_types_deep_strict_pick_glob_nested() {
+  type Question = DeepStrictPick<{ a: { b: 1; c: 2 }; d: 3 }, 'a.*'>;
+  type Answer = Equal<Question, { a: { b: 1; c: 2 } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick with 'a.*' combined with another key works.
+ */
+export function test_types_deep_strict_pick_glob_with_other_key() {
+  type Question = DeepStrictPick<{ a: { b: 1; c: 2 }; d: 3; e: 4 }, 'a.*' | 'd'>;
+  type Answer = Equal<Question, { a: { b: 1; c: 2 }; d: 3 }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick with 'items[*].*' picks all array element properties.
+ */
+export function test_types_deep_strict_pick_glob_array() {
+  type Question = DeepStrictPick<
+    { items: { id: number; name: string }[]; other: boolean },
+    'items[*].*'
+  >;
+  type Answer = Equal<Question, { items: { id: number; name: string }[] }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick with 'a.b.*' picks all deeply nested properties.
+ */
+export function test_types_deep_strict_pick_glob_deep_nested() {
+  type Question = DeepStrictPick<{ a: { b: { c: 1; d: 2 }; e: 3 } }, 'a.b.*'>;
+  type Answer = Equal<Question, { a: { b: { c: 1; d: 2 } } }>;
+  ok(typia.random<Answer>());
+}
