@@ -36,7 +36,10 @@ jobs:
           git config --local user.email "kscodebase@gmail.com"
           git config --local user.name "kakasoo"
 
-      - name: build
+      - name: Build and run tests
+        run: npm run build:test && npm run test
+
+      - name: Production build
         run: npm run build
 
       - name: Bump version

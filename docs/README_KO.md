@@ -10,6 +10,45 @@
 
 ![example](https://github.com/user-attachments/assets/28316425-8302-453e-b238-0c732606e6a7)
 
+## AI 시대에 왜 필요한가?
+
+AI가 그 어느 때보다 많은 코드를 작성하고 있으며, 그만큼 미묘한 실수도 더 많이 발생합니다. 이 라이브러리는 AI가 생성한 코드의 **컴파일 타임 가드레일** 역할을 합니다.
+
+### 문제
+
+AI 코딩 도구는 겉보기에는 정상이지만 깊게 중첩된 구조에서 미묘한 타입 불일치가 있는 코드를 자주 생성합니다:
+
+```typescript
+// AI 생성 코드: 괜찮아 보이지만, "prce"는 오타
+function getTotal(order: Order) {
+  return order.items.map(i => i.prce); // 느슨한 타입에서는 에러 없음
+}
+```
+
+### 해결
+
+엄격한 deep 타입을 제약 조건으로 사용하면, TypeScript 컴파일러가 AI의 실수를 **즉시** 잡아냅니다:
+
+```typescript
+import { DeepStrictPick } from '@kakasoo/deep-strict-types';
+
+type OrderSummary = DeepStrictPick<Order, 'items[*].price' | 'customer.name'>;
+
+// AI가 정확한 에러를 받음:
+// Type '"items[*].prce"' is not assignable to
+//   type '"items" | "items[*]" | "items[*].price" | "customer" | "customer.name"'
+```
+
+### AI 자체 수정 루프
+
+`tsc`나 `tsx` 빌드 루프에서 사용하면, AI 에이전트가 타입 에러를 읽고 무엇이 잘못되었는지 정확히 파악하여 자동으로 수정할 수 있습니다:
+
+```
+AI 코드 생성 → tsc 컴파일 → 타입 에러 → AI가 에러 해석 → AI 자체 수정 → 재컴파일
+```
+
+타입이 엄격할수록 에러 메시지가 정확해지고, AI가 올바른 코드에 더 빠르게 도달합니다. **AI 주도 워크플로에서 deep strict 타입은 부담이 아니라 안전망입니다.**
+
 ## 설치
 
 ```bash

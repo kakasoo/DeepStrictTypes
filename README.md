@@ -10,6 +10,45 @@ Type-safe `Pick`, `Omit`, and key extraction for deeply nested TypeScript object
 
 ![example](https://github.com/user-attachments/assets/28316425-8302-453e-b238-0c732606e6a7)
 
+## Why in the AI Era?
+
+AI writes more code than ever — and makes more subtle mistakes than ever. This library serves as a **compile-time guardrail** for AI-generated code.
+
+### The Problem
+
+AI coding tools often produce code that looks correct but has subtle type mismatches in deeply nested structures:
+
+```typescript
+// AI-generated code: looks fine, but "prce" is a typo
+function getTotal(order: Order) {
+  return order.items.map(i => i.prce); // no error with loose types
+}
+```
+
+### The Solution
+
+With strict deep types as constraints, the TypeScript compiler catches AI mistakes **instantly**:
+
+```typescript
+import { DeepStrictPick } from '@kakasoo/deep-strict-types';
+
+type OrderSummary = DeepStrictPick<Order, 'items[*].price' | 'customer.name'>;
+
+// Now AI gets a precise error:
+// Type '"items[*].prce"' is not assignable to
+//   type '"items" | "items[*]" | "items[*].price" | "customer" | "customer.name"'
+```
+
+### AI Self-Correction Loop
+
+When used with `tsc` or `tsx` in a build loop, AI agents can read the type error, understand exactly what went wrong, and fix it automatically:
+
+```
+AI generates code → tsc compile → type error → AI reads error → AI self-corrects → recompile
+```
+
+The stricter your types, the better the error messages, and the faster AI converges on correct code. **In an AI-driven workflow, deep strict types aren't overhead — they're the safety net.**
+
 ## Installation
 
 ```bash
