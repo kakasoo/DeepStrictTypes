@@ -73,3 +73,39 @@ export function test_types_get_element_member_no_match() {
   type Answer = Equal<Question, never>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that GetMember returns never when key exactly matches (no dot after).
+ */
+export function test_types_get_member_exact_match_no_dot() {
+  type Question = GetMember<"a", "a">;
+  type Answer = Equal<Question, never>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that GetMember extracts member from a middle segment.
+ */
+export function test_types_get_member_middle_segment() {
+  type Question = GetMember<"a.b.c.d", "a.b">;
+  type Answer = Equal<Question, "c.d">;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that GetElementMember handles deeply nested array with multiple levels after [*].
+ */
+export function test_types_get_element_member_deep_nested_array() {
+  type Question = GetElementMember<"data[*].items.details.name", "data">;
+  type Answer = Equal<Question, "items.details.name">;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that GetElementMember with empty string prefix extracts from [*] notation.
+ */
+export function test_types_get_element_member_empty_prefix() {
+  type Question = GetElementMember<"[*].a", "">;
+  type Answer = Equal<Question, "a">;
+  ok(typia.random<Answer>());
+}

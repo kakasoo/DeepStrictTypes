@@ -1,362 +1,236 @@
-# DeepStrictTypes Library Documentation
+# @kakasoo/deep-strict-types
 
-- [한국어 설명](./docs/README_KO.md)
+[![npm version](https://img.shields.io/npm/v/@kakasoo/deep-strict-types.svg)](https://www.npmjs.com/package/@kakasoo/deep-strict-types)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![TypeScript](https://img.shields.io/badge/TypeScript-%3E%3D5.0-blue)](https://www.typescriptlang.org/)
 
-## Table of Contents
+Type-safe `Pick`, `Omit`, and key extraction for deeply nested TypeScript objects and arrays.
 
-1. [Introduction](#introduction)
-2. [DeepStrictObjectKeys](#deepstrictobjectkeys)
-3. [DeepStrictOmit](#deepstrictomit)
-4. [DeepStrictPick](#deepstrictpick)
-5. [StringToDeepObject](#stringtodeepobject)
-6. [DeepStrictMerge](#deepstrictmerge)
-7. [DeepDateToString](#deepdatetostring)
-
-## Introduction
-
-DeepStrictTypes is a tool that takes TypeScript’s type manipulation to the next level.  
-It helps you safely perform tasks like `Omit` and `Pick` even with complex nested objects or arrays.  
-By addressing the limitations of TypeScript’s built-in utility types, it allows you to easily handle internal keys with strict and precise type inference.
-
-Key features include:
-
-- **Safe Nested Key Extraction:** It extracts all keys from within an object, boosting type safety.
-- **Precise Type Manipulation:** You can pick or omit only the keys you need even in deeply nested structures, making it easier to work with complex data.
-- **Unbranding and Merging:** It removes unnecessary constraints from branded types and safely merges multiple types.
-- **Utility Function Support (Experimental):** It even provides runtime functions to further ensure type safety during development.
-
-Below is a GIF showing an example of how to use the library.
+[한국어 설명](./docs/README_KO.md)
 
 ![example](https://github.com/user-attachments/assets/28316425-8302-453e-b238-0c732606e6a7)
 
-## DeepStrictObjectKeys
+## Installation
 
-`DeepStrictObjectKeys` extracts all keys from a nested object, preserving its hierarchical structure as a union of string paths.  
-That means you can access not only top-level keys but also nested keys using dot notation or, for arrays, using `[*]`.
+```bash
+npm install @kakasoo/deep-strict-types
+```
 
-### Key Features
+## Quick Start
 
-- **Preserves Hierarchy:** It retrieves every key from within an object so you can express paths like "user.address.city".
-- **Accurate Type Inference:** Instead of just using `keyof`, it thoroughly infers every nested key for enhanced type safety.
-- **Array Support:** For objects within arrays, it uses `[*]` instead of an index, so you cover all elements at once.
+```typescript
+import { DeepStrictObjectKeys, DeepStrictPick, DeepStrictOmit } from '@kakasoo/deep-strict-types';
 
-### Example
+type User = {
+  id: string;
+  profile: {
+    name: string;
+    age: number;
+  };
+  posts: {
+    title: string;
+    tags: string[];
+  }[];
+};
 
-The following example shows how to extract keys from a nested object using `DeepStrictObjectKeys`.
+// Extract all nested key paths
+type Keys = DeepStrictObjectKeys<User>;
+// "id" | "profile" | "profile.name" | "profile.age" | "posts" | "posts[*].title" | "posts[*].tags"
+
+// Pick only what you need
+type NameOnly = DeepStrictPick<User, 'profile.name'>;
+// { profile: { name: string } }
+
+// Remove what you don't need
+type NoAge = DeepStrictOmit<User, 'profile.age'>;
+// { id: string; profile: { name: string }; posts: { title: string; tags: string[] }[] }
+```
+
+## Core Types
+
+### `DeepStrictObjectKeys<T>`
+
+Extracts all keys from a nested object as a union of dot-notation string paths. Arrays use `[*]` notation.
 
 ```typescript
 type Example = {
   user: {
     name: string;
-    address: {
-      city: string;
-      zip: number;
-    };
+    address: { city: string; zip: number };
   };
 };
 
-// Result: "user" | "user.name" | "user.address" | "user.address.city" | "user.address.zip"
 type Keys = DeepStrictObjectKeys<Example>;
+// "user" | "user.name" | "user.address" | "user.address.city" | "user.address.zip"
 ```
 
-The library also offers a utility function `deepStrictObjectKeys` based on this type, which works like `Object.keys` but correctly extracts nested paths.
-
 ```typescript
-type Target = { a: 1 }[][];
-const keys = deepStrictObjectKeys({} as Target); // Result: ["[*].[*].a"]
+type WithArray = { items: { name: string; price: number }[] };
+
+type Keys = DeepStrictObjectKeys<WithArray>;
+// "items" | "items[*].name" | "items[*].price"
 ```
 
-## DeepStrictOmit
+### `DeepStrictPick<T, K>`
 
-`DeepStrictOmit` creates a new type by removing specified keys from a nested object type.
-Similar to the built-in `Omit`, it lets you precisely specify key paths—even in nested structures and arrays—to remove unwanted properties.
-
-### Key Features
-
-- **Omit Nested Keys:** You can specify a nested key path like `"user.profile.name"` to remove just that property.
-- **Handles Arrays:** It applies the same logic to objects within arrays, so you can remove a key from every element.
-- **Accurate Type Inference:** It preserves the rest of the object’s structure and types after omission.
-- **Supports Branded Types:** It works safely with branded types, removing unnecessary constraints.
-
-### Example
-
-Below is an example of how to apply `DeepStrictOmit` to both nested objects and objects within arrays.
+Creates a new type by selecting only the specified nested keys, preserving the object structure.
 
 ```typescript
-// Define an example object type
 type Example = {
   user: {
     id: string;
-    profile: {
-      name: string;
-      age: number;
-      email: string;
-    };
-    posts: {
-      title: string;
-      content: string;
-      meta: {
-        likes: number;
-        shares: number;
-      };
-    }[];
+    profile: { name: string; age: number; email: string };
+    posts: { title: string; content: string; meta: { likes: number; shares: number } }[];
   };
 };
 
-// Remove the keys 'user.profile.email' and 'user.posts[*].meta.shares'
-type Omitted = DeepStrictOmit<Example, 'user.profile.email' | 'user.posts[*].meta.shares'>;
-
-/*
-  Resulting type Omitted:
-  {
-    user: {
-      id: string;
-      profile: {
-        name: string;
-        age: number;
-      };
-      posts: {
-        title: string;
-        content: string;
-        meta: {
-          likes: number;
-        };
-      }[];
-    };
-  }
-*/
-```
-
-In short, with `DeepStrictOmit` you can neatly remove only the keys you want from even the most complex nested objects or arrays.
-
-## DeepStrictPick
-
-`DeepStrictPick` creates a new type by selecting only the specified keys from a nested object type.
-It works like the built-in `Pick` but lets you precisely choose key paths—even in nested structures and arrays—so you only get the properties you need.
-
-### Key Features
-
-- **Pick Nested Keys:** Specify a nested key path like `"user.profile.name"` to pick only that property.
-- **Handles Arrays:** It also works on objects within arrays, allowing you to extract just the desired data.
-- **Accurate Type Inference:** It builds a type that only includes the selected properties, enhancing both type safety and readability.
-- **Flexible:** You can specify multiple nested keys at once.
-
-### Example
-
-Below is an example of using `DeepStrictPick` on nested objects and arrays.
-
-```typescript
-// Define an example object type
-type Example = {
-  user: {
-    id: string;
-    profile: {
-      name: string;
-      age: number;
-      email: string;
-    };
-    posts: {
-      title: string;
-      content: string;
-      meta: {
-        likes: number;
-        shares: number;
-      };
-    }[];
-  };
-};
-
-// Pick only the keys 'user.profile.name' and 'user.posts[*].meta.likes'
 type Picked = DeepStrictPick<Example, 'user.profile.name' | 'user.posts[*].meta.likes'>;
-
 /*
-  Resulting type Picked:
   {
     user: {
-      profile: {
-        name: string;
-      };
-      posts: {
-        meta: {
-          likes: number;
-        };
-      }[];
+      profile: { name: string };
+      posts: { meta: { likes: number } }[];
     };
   }
 */
 ```
 
-So, `DeepStrictPick` lets you extract only the properties you want from even the most deeply nested structures.
+### `DeepStrictOmit<T, K>`
 
-## StringToDeepObject
-
-`StringToDeepObject` takes a string path in dot notation and generates a nested object type corresponding to that path.
-It parses the path string step by step, building a nested object and assigning the desired type to the final property.
-
-### Key Features
-
-- **Parses Path Strings:** Converts a string like "user.profile.name" into an object where each segment becomes a key.
-- **Dynamically Creates Objects:** Automatically builds a nested object based on the path, assigning the specified type at the end.
-- **Merges Union Types:** If you pass a union of path strings, it merges the resulting objects into one combined type.
-- **Type Safe:** Handles string paths safely within the type system to accurately represent nested structures.
-
-### Example
+Creates a new type by removing the specified nested keys.
 
 ```typescript
-// Example: Assigning a string type to the path 'user.profile.name'
-type DeepObj = StringToDeepObject<'user.profile.name', string>;
-
+type Omitted = DeepStrictOmit<Example, 'user.profile.email' | 'user.posts[*].meta.shares'>;
 /*
-  Resulting type DeepObj:
-  {
-    user: {
-      profile: {
-        name: string;
-      };
-    };
-  }
-*/
-
-// Another example: Assigning a number type at the end of a path
-type DeepNumberObj = StringToDeepObject<'settings.display.brightness', number>;
-
-/*
-  Resulting type DeepNumberObj:
-  {
-    settings: {
-      display: {
-        brightness: number;
-      };
-    };
-  }
-*/
-
-// Union type example: Two paths merge into one combined object type
-type MergedObj = StringToDeepObject<'user.profile.name' | 'user.profile.age', string | number>;
-
-/*
-  Resulting type MergedObj:
-  {
-    user: {
-      profile: {
-        name: string;
-        age: number;
-      };
-    };
-  }
-*/
-```
-
-In short, `StringToDeepObject` lets you quickly create nested object types from a dot-delimited string, and even merge multiple paths if needed.
-
-## DeepStrictMerge
-
-`DeepStrictMerge` deeply merges two or more object types into a single unified type.
-It recursively combines every property in nested structures, and when the same key exists in multiple objects, it follows a set of rules to merge them.
-
-### Key Features
-
-- **Deep Merge:** Recursively merges not only top-level properties but also all nested objects.
-- **Accurate Type Inference:** Each object’s type information is retained in the merged result, ensuring type safety.
-- **Conflict Resolution:** When the same key exists in multiple objects, it resolves the conflict according to defined rules.
-- **Flexible:** You can merge several object types at once, making it easy to manage complex data structures.
-
-### Example
-
-```typescript
-// Define two object types to merge
-type ObjA = {
-  user: {
-    id: string;
-    profile: {
-      name: string;
-      age: number;
-    };
-  };
-};
-
-type ObjB = {
-  user: {
-    profile: {
-      email: string;
-      // If both objects have the key 'age', the merge rule applies.
-      age: number;
-    };
-    settings: {
-      theme: string;
-    };
-  };
-};
-
-// Deep merge the two objects into one type
-type Merged = DeepStrictMerge<ObjA, ObjB>;
-
-/*
-  Resulting type Merged:
   {
     user: {
       id: string;
-      profile: {
-        name: string;
-        age: number;  // Merged according to the rules
-        email: string;
-      };
-      settings: {
-        theme: string;
-      };
+      profile: { name: string; age: number };
+      posts: { title: string; content: string; meta: { likes: number } }[];
     };
   }
 */
 ```
 
-So, `DeepStrictMerge` lets you seamlessly combine different object types into one, even when they have complex nested structures.
+### `DeepStrictMerge<Target, Source>`
 
-## DeepDateToString
-
-`DeepDateToString` finds every `Date` type in an object and converts it to a `string` recursively.
-It locates all `Date` properties—even deep within nested objects or arrays—and converts them to strings, which is especially useful for serialization or JSON conversion.
-
-### Key Features
-
-- **Recursive Conversion:** It transforms every `Date` type found in the object, including those in nested objects and arrays.
-- **Ensures Type Consistency:** By explicitly converting `Date` to `string`, it prevents type mismatches during serialization or API responses.
-- **Handles Complex Structures:** Works reliably even with deeply nested objects and arrays containing `Date` values.
-
-### Example
+Deeply merges two object types. When both types share a key, `Target` takes precedence.
 
 ```typescript
-// Define an example object type
-type Example = {
-  createdAt: Date;
-  updatedAt: Date;
+type A = { user: { id: string; profile: { name: string } } };
+type B = { user: { profile: { email: string }; settings: { theme: string } } };
+
+type Merged = DeepStrictMerge<A, B>;
+/*
+  {
+    user: {
+      id: string;
+      profile: { name: string; email: string };
+      settings: { theme: string };
+    };
+  }
+*/
+```
+
+Arrays of objects are also merged element-wise:
+
+```typescript
+type Merged = DeepStrictMerge<{ a: number }[], { b: string }[]>;
+// { a: number; b: string }[]
+```
+
+### `GetType<T, K>`
+
+Extracts the type at a specific nested path.
+
+```typescript
+type Data = {
   user: {
     name: string;
-    birthDate: Date;
-    posts: {
-      title: string;
-      publishedAt: Date;
-    }[];
+    posts: { title: string; tags: string[] }[];
   };
 };
 
-// Convert all Date properties to string using DeepDateToString
-type StringifiedExample = DeepDateToString<Example>;
-
-/*
-  Resulting type StringifiedExample:
-  {
-    createdAt: string;
-    updatedAt: string;
-    user: {
-      name: string;
-      birthDate: string;
-      posts: {
-        title: string;
-        publishedAt: string;
-      }[];
-    };
-  }
-*/
+type T1 = GetType<Data, 'user.name'>;           // string
+type T2 = GetType<Data, 'user.posts'>;           // { title: string; tags: string[] }[]
+type T3 = GetType<Data, 'user.posts[*].title'>;  // string
+type T4 = GetType<Data, 'user.posts[*].tags'>;   // string[]
 ```
 
-In short, `DeepDateToString` makes sure that every `Date` inside an object is converted to a `string`, ensuring type consistency for operations like serialization or JSON conversion.
+### `DeepDateToString<T>`
+
+Recursively converts all `Date` types to `string`. Useful for representing serialized/JSON response types.
+
+```typescript
+type Input = {
+  createdAt: Date;
+  user: { name: string; birthDate: Date };
+};
+
+type Output = DeepDateToString<Input>;
+// { createdAt: string; user: { name: string; birthDate: string } }
+```
+
+### `DeepStrictUnbrand<T>`
+
+Recursively removes branding (e.g., `typia` tags like `Format<'uuid'>`) from types, restoring base primitives.
+
+```typescript
+type Branded = {
+  id: string & { __brand: 'uuid' };
+  profile: { email: string & { __brand: 'email' } };
+};
+
+type Clean = DeepStrictUnbrand<Branded>;
+// { id: string; profile: { email: string } }
+```
+
+## Runtime Functions
+
+### `deepStrictObjectKeys(obj)`
+
+Runtime counterpart of `DeepStrictObjectKeys`. Returns an array of all dot-notation key paths.
+
+```typescript
+import { deepStrictObjectKeys } from '@kakasoo/deep-strict-types';
+
+const keys = deepStrictObjectKeys({ a: { b: 1, c: 2 } });
+// ["a", "a.b", "a.c"]
+```
+
+### `deepStrictAssert(obj)(key)`
+
+Curried runtime function that extracts a specific nested property, preserving the object structure. Type-safe counterpart of `DeepStrictPick`.
+
+```typescript
+import { deepStrictAssert } from '@kakasoo/deep-strict-types';
+
+const data = {
+  user: { name: 'Alice', age: 30 },
+  posts: [{ title: 'Hello', content: 'World' }],
+};
+
+const result = deepStrictAssert(data)('user.name');
+// { user: { name: 'Alice' } }
+```
+
+## Utility Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| `DeepStrictObjectLastKeys<T>` | Extracts only the leaf-level (deepest) keys | `"a.b.c"` instead of `"a" \| "a.b" \| "a.b.c"` |
+| `StringToDeepObject<T>` | Converts a comma-separated dot-notation string to a nested object type | `StringToDeepObject<"a.b,c">` = `{ a: { b: any }; c: any }` |
+| `Equal<X, Y>` | Type-level equality check (returns `true` or `false`) | `Equal<string, string>` = `true` |
+| `ElementOf<T>` | Extracts the element type from an array | `ElementOf<string[]>` = `string` |
+| `IsAny<T>` | Checks if a type is `any` | `IsAny<any>` = `true` |
+| `IsUnion<T>` | Checks if a type is a union | `IsUnion<string \| number>` = `true` |
+| `ValueType` | Union of all primitive types + `Date` | `string \| number \| boolean \| ...` |
+| `GetMember<T, Prefix>` | Extracts key segments after a dot-notation prefix | Internal helper for `DeepStrictOmit` |
+| `GetElementMember<T, Prefix>` | Extracts array element sub-keys after a `[*]` prefix | Internal helper for `DeepStrictOmit` |
+| `RemoveAfterDot<T, K>` | Generates wildcard patterns for descendant keys | Internal helper for `DeepStrictPick` |
+| `RemoveArraySymbol<T>` | Strips `[*]` suffix from a key string | `RemoveArraySymbol<"items[*]">` = `"items"` |
+| `RemoveLastProperty<T>` | Extracts all parent path segments | `RemoveLastProperty<"a.b.c">` = `"a" \| "a.b"` |
+
+## License
+
+ISC

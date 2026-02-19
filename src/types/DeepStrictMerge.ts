@@ -51,6 +51,17 @@ namespace DeepStrictMerge {
  * 2. For array types, if both `Target` and `Source` are arrays and their elements are objects, those elements are merged.
  *    - If the elements of the arrays are not objects, merging is not possible.
  * 3. If only one of the types is an array, merging is not possible.
+ *
+ * @template Target - The primary object type. Its values take precedence on overlapping keys.
+ * @template Source - The secondary object type whose unique keys are added to the result.
+ * @returns A deeply merged object type combining `Target` and `Source`
+ *
+ * @example
+ * ```ts
+ * type Ex1 = DeepStrictMerge<{ a: 1 }, { b: 2 }>; // { a: 1; b: 2 }
+ * type Ex2 = DeepStrictMerge<{ a: { b: 1 } }, { a: { c: 2 } }>; // { a: { b: 1; c: 2 } }
+ * type Ex3 = DeepStrictMerge<{ a: 1 }, { a: 2 }>; // { a: 1 } (Target wins)
+ * ```
  */
 export type DeepStrictMerge<Target extends object, Source extends object> =
   Target extends Array<infer TE extends object>

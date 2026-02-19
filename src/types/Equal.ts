@@ -14,15 +14,18 @@ type Expression<X> = <T>() => T extends X ? 1 : 2;
  * equal, and `false` otherwise.
  * 
  * This type performs a strict equality check that distinguishes between:
- * - `any` vs other types
- * - `unknown` vs other types  
  * - Union types with different members
  * - Branded types vs their base types
- * 
+ * - Optional vs required properties
+ *
+ * **Known limitation:** Due to how TypeScript resolves `any` in generic function signatures,
+ * `Equal<any, T>` returns `true` for any `T`. This means `any` cannot be distinguished
+ * from specific types using this approach.
+ *
  * @template X - The first type to compare
  * @template Y - The second type to compare
  * @returns `true` if X and Y are exactly the same type, `false` otherwise
- * 
+ *
  * @example
  * ```typescript
  * type Test1 = Equal<string, string>; // true
@@ -31,8 +34,8 @@ type Expression<X> = <T>() => T extends X ? 1 : 2;
  * type Test4 = Equal<string | number, number | string>; // true (order doesn't matter)
  * type Test5 = Equal<{ a: string }, { a: string }>; // true
  * type Test6 = Equal<{ a: string }, { a: string; b?: string }>; // false
- * type Test7 = Equal<any, string>; // false
- * type Test8 = Equal<unknown, any>; // false
+ * type Test7 = Equal<any, string>; // true (known limitation)
+ * type Test8 = Equal<unknown, any>; // true (known limitation)
  * type Test9 = Equal<string & { __brand: 'ID' }, string>; // false (branded types)
  * ```
  */

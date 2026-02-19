@@ -4,6 +4,16 @@ import type { IsUnion } from './IsUnion';
 import type { ValueType } from './ValueType';
 
 namespace DeepStrictObjectLastKeys {
+  /**
+   * @internal Recursively extracts only the leaf-level (last) keys from a nested object type.
+   *
+   * Unlike {@link DeepStrictObjectKeys.Infer}, this type skips intermediate keys and only
+   * returns the deepest reachable paths. Union-typed properties are treated as leaf keys.
+   *
+   * @template T - The object type to extract leaf keys from
+   * @template Joiner - Separator symbols for array and object paths
+   * @template P - The current property keys being processed
+   */
   export type Infer<
     T extends object,
     Joiner extends {
@@ -42,10 +52,15 @@ namespace DeepStrictObjectLastKeys {
  * - For arrays, it appends array indices (`[*]`) followed by the key of the element.
  * - For objects, it recursively traverses the nested structure and appends the last level keys.
  *
- * Example Usage:
+ * @template T - The object type to extract leaf keys from
+ * @template Joiner - Defines the separator symbols for joining nested paths. `array` is used for array access (default `'[*]'`), `object` is used for object access (default `'.'`).
+ * @template P - The property keys of `T` to iterate over (defaults to `keyof T`)
+ * @returns A union of dot-notation strings representing only the deepest (leaf) keys in `T`
+ *
+ * @example
  * ```ts
- * type Example1 = DeepStrictObjectLastKeys<{ a: { b: { c: number[] } } }>; // "a.b.c"
- * type Example2 = DeepStrictObjectLastKeys<{ a: { b: number[]; c: { d: string }[] } }>; // "a.b" | "a.c" | "a.c[*].d"
+ * type Ex1 = DeepStrictObjectLastKeys<{ a: { b: { c: number[] } } }>; // "a.b.c"
+ * type Ex2 = DeepStrictObjectLastKeys<{ a: { b: number[]; c: { d: string }[] } }>; // "a.b" | "a.c[*].d"
  * ```
  */
 export type DeepStrictObjectLastKeys<
