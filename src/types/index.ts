@@ -1,4 +1,7 @@
 export * from './DeepDateToString';
+export * from './DeepMerge';
+export * from './DeepOmit';
+export * from './DeepPick';
 export * from './DeepStrictMerge';
 export * from './DeepStrictObjectKeys';
 export * from './DeepStrictObjectLastKeys';
