@@ -91,3 +91,58 @@ export function test_types_equal_any_type() {
   type Answer = Equal<Question, true>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that Equal distinguishes branded type from its base type.
+ */
+export function test_types_equal_branded_vs_base() {
+  type Branded = string & { __brand: 'ID' };
+  type Question = Equal<Branded, string>;
+  type Answer = Equal<Question, false>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Equal returns false for optional vs required property.
+ */
+export function test_types_equal_optional_vs_required() {
+  type Question = Equal<{ a?: string }, { a: string }>;
+  type Answer = Equal<Question, false>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Equal returns true for empty objects.
+ */
+export function test_types_equal_empty_objects() {
+  type Question = Equal<{}, {}>;
+  type Answer = Equal<Question, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Equal returns true for identical nested objects.
+ */
+export function test_types_equal_nested_objects() {
+  type Question = Equal<{ a: { b: { c: number } } }, { a: { b: { c: number } } }>;
+  type Answer = Equal<Question, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Equal treats any as equal to string (known limitation of Expression pattern).
+ */
+export function test_types_equal_any_vs_string() {
+  type Question = Equal<any, string>;
+  type Answer = Equal<Question, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Equal treats unknown as equal to any (known limitation of Expression pattern).
+ */
+export function test_types_equal_unknown_vs_any() {
+  type Question = Equal<unknown, any>;
+  type Answer = Equal<Question, true>;
+  ok(typia.random<Answer>());
+}

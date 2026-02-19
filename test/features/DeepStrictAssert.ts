@@ -88,3 +88,45 @@ export function test_functions_deepStrictAssert_accesses_property_a_from_root_ar
   const original = typia.random<Example[] & tags.MinItems<1>>();
   typia.assertEquals(deepStrictAssert(original)('[*].a'));
 }
+
+interface SimpleNested {
+  user: {
+    name: string;
+    age: number;
+  };
+  title: string;
+}
+
+/**
+ * Tests that deepStrictAssert can access a nested non-array object property.
+ */
+export function test_functions_deepStrictAssert_accesses_nested_object_property() {
+  const original = typia.random<SimpleNested>();
+  typia.assertEquals(deepStrictAssert(original)('user.name'));
+}
+
+/**
+ * Tests that deepStrictAssert throws when accessing a non-existent key.
+ */
+export function test_functions_deepStrictAssert_throws_on_invalid_key() {
+  const original = { x: 1, y: 2 } as { x: number; y: number };
+  let threw = false;
+  try {
+    // Cast to bypass type check to test runtime behavior
+    (deepStrictAssert(original) as any)('nonexistent.key');
+  } catch {
+    threw = true;
+  }
+  if (!threw) throw new Error('Expected deepStrictAssert to throw for invalid key');
+}
+
+/**
+ * Tests that deepStrictAssert works with nested property from array with multiple nested keys.
+ */
+export function test_functions_deepStrictAssert_accesses_multiple_nested_array_props() {
+  const original = typia.random<Example>();
+  const resultD = deepStrictAssert(original)('c[*].d');
+  const resultE = deepStrictAssert(original)('c[*].e');
+  typia.assertEquals(resultD);
+  typia.assertEquals(resultE);
+}

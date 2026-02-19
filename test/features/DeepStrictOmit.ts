@@ -131,3 +131,69 @@ export function test_types_deep_strict_omit_all_properties() {
   type IsAnswer = Equal<DeepStrictOmit<Question, 'id' | 'name' | 'content'>, {}>;
   ok(typia.random<IsAnswer>());
 }
+
+/**
+ * Tests that DeepStrictOmit correctly omits a nested property from array elements.
+ */
+export function test_types_deep_strict_omit_nested_array_property() {
+  type Question = DeepStrictOmit<
+    { items: { id: number; name: string }[] },
+    'items[*].id'
+  >;
+  type IsAnswer = Equal<Question, { items: { name: string }[] }>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit works on root-level arrays with [*] notation.
+ */
+export function test_types_deep_strict_omit_root_array() {
+  type Question = DeepStrictOmit<{ a: number; b: string }[], '[*].a'>;
+  type IsAnswer = Equal<Question, { b: string }[]>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit works at 3 depth levels.
+ */
+export function test_types_deep_strict_omit_three_depth() {
+  type Question = DeepStrictOmit<
+    { a: { b: { c: number; d: string } } },
+    'a.b.c'
+  >;
+  type IsAnswer = Equal<Question, { a: { b: { d: string } } }>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit preserves Date types without recursing.
+ */
+export function test_types_deep_strict_omit_preserves_date() {
+  type Question = DeepStrictOmit<
+    { created: Date; name: string; updated: Date },
+    'name'
+  >;
+  type IsAnswer = Equal<Question, { created: Date; updated: Date }>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit can omit multiple nested keys simultaneously.
+ */
+export function test_types_deep_strict_omit_multiple_nested() {
+  type Question = DeepStrictOmit<
+    { a: { b: number; c: string; d: boolean } },
+    'a.b' | 'a.d'
+  >;
+  type IsAnswer = Equal<Question, { a: { c: string } }>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit correctly handles a simple single key omit.
+ */
+export function test_types_deep_strict_omit_simple_single() {
+  type Question = DeepStrictOmit<{ a: number; b: string }, 'a'>;
+  type IsAnswer = Equal<Question, { b: string }>;
+  ok(typia.random<IsAnswer>());
+}

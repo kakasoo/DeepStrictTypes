@@ -91,3 +91,39 @@ export function test_types_is_union_false_never() {
   type Answer = Equal<Question, false>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that IsUnion returns true for boolean (which is true | false).
+ */
+export function test_types_is_union_true_boolean() {
+  type Question = IsUnion<boolean>;
+  type Answer = Equal<Question, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that IsUnion returns true for string literal union.
+ */
+export function test_types_is_union_true_literal_strings() {
+  type Question = IsUnion<'a' | 'b' | 'c'>;
+  type Answer = Equal<Question, true>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that IsUnion returns false for unknown.
+ */
+export function test_types_is_union_false_unknown() {
+  type Question = IsUnion<unknown>;
+  type Answer = Equal<Question, false>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that IsUnion returns false for any.
+ */
+export function test_types_is_union_false_any() {
+  type Question = IsUnion<any>;
+  type Answer = Equal<Question, false>;
+  ok(typia.random<Answer>());
+}

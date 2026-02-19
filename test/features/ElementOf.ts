@@ -55,3 +55,39 @@ export function test_types_element_of_tuple() {
   type Answer = Equal<Question, string | number | boolean>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that ElementOf extracts element type from a 2D array (returns inner array).
+ */
+export function test_types_element_of_2d_array() {
+  type Question = ElementOf<number[][]>;
+  type Answer = Equal<Question, number[]>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that ElementOf extracts Date from Date array.
+ */
+export function test_types_element_of_date_array() {
+  type Question = ElementOf<Date[]>;
+  type Answer = Equal<Question, Date>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that ElementOf handles array of nested objects.
+ */
+export function test_types_element_of_nested_object_array() {
+  type Question = ElementOf<{ a: { b: number } }[]>;
+  type Answer = Equal<Question, { a: { b: number } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that ElementOf handles array with null union elements.
+ */
+export function test_types_element_of_nullable_array() {
+  type Question = ElementOf<(string | null)[]>;
+  type Answer = Equal<Question, string | null>;
+  ok(typia.random<Answer>());
+}

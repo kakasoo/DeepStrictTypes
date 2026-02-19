@@ -64,3 +64,69 @@ export function test_types_deep_strict_pick_from_array_notation() {
 
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that DeepStrictPick correctly picks a single top-level key.
+ */
+export function test_types_deep_strict_pick_single_top_level() {
+  type Question = DeepStrictPick<{ a: number; b: string; c: boolean }, 'a'>;
+  type Answer = Equal<Question, { a: number }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick correctly picks multiple top-level keys via union.
+ */
+export function test_types_deep_strict_pick_multiple_top_level() {
+  type Question = DeepStrictPick<{ a: number; b: string; c: boolean }, 'a' | 'b'>;
+  type Answer = Equal<Question, { a: number; b: string }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick works at 3 levels of nesting.
+ */
+export function test_types_deep_strict_pick_three_levels() {
+  type Question = DeepStrictPick<{ a: { b: { c: number; d: string } } }, 'a.b.c'>;
+  type Answer = Equal<Question, { a: { b: { c: number } } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick preserves Date types without recursing into them.
+ */
+export function test_types_deep_strict_pick_preserves_date() {
+  type Question = DeepStrictPick<{ a: Date; b: number }, 'a'>;
+  type Answer = Equal<Question, { a: Date }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick can pick both a nested key and a top-level key simultaneously.
+ */
+export function test_types_deep_strict_pick_nested_and_top_level() {
+  type Question = DeepStrictPick<{ a: { b: number; c: string }; d: boolean }, 'a.b' | 'd'>;
+  type Answer = Equal<Question, { a: { b: number }; d: boolean }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick picks a property from deeply nested array elements.
+ */
+export function test_types_deep_strict_pick_deep_array_element() {
+  type Question = DeepStrictPick<
+    { data: { items: { id: number; name: string }[] } },
+    'data.items[*].id'
+  >;
+  type Answer = Equal<Question, { data: { items: { id: number }[] } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictPick picks all keys (returns the full object).
+ */
+export function test_types_deep_strict_pick_all_keys() {
+  type Question = DeepStrictPick<{ a: number; b: string }, 'a' | 'b'>;
+  type Answer = Equal<Question, { a: number; b: string }>;
+  ok(typia.random<Answer>());
+}
