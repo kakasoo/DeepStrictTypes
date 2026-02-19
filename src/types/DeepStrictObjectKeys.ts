@@ -6,6 +6,16 @@ import type { ValueType } from './ValueType';
 
 namespace DeepStrictObjectKeys {
   /**
+   * Distributive wrapper for Infer that properly handles union element types.
+   * When Element is a union (e.g., {a: 1} | {b: 2} from tuple [{ a: 1 }, { b: 2 }]),
+   * this distributes the Infer call to each member of the union individually,
+   * avoiding the issue where keyof (A | B) = (keyof A) & (keyof B) = never.
+   */
+  type DistributeInfer<T, Joiner extends { array: string; object: string }, IsSafe extends boolean> = T extends object
+    ? Infer<T, Joiner, IsSafe>
+    : never;
+
+  /**
    * Internal helper type that recursively extracts all keys from nested objects
    * @template Target - The object type to extract keys from
    * @template Joiner - Defines the symbols used to join nested paths (array: '[*]', object: '.')
@@ -34,7 +44,7 @@ namespace DeepStrictObjectKeys {
                               ? // For arrays of objects, add array notation and recurse into elements
                                 | P
                                   // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
-                                  | `${P}${Joiner['array']}${Joiner['object']}${Infer<_Element, Joiner, IsSafe>}` // recursive
+                                  | `${P}${Joiner['array']}${Joiner['object']}${DistributeInfer<_Element, Joiner, IsSafe>}` // recursive
                               : // For regular objects, add object notation and recurse
                                 `${P}${Joiner['object']}${Infer<E, Joiner, IsSafe>}` // recursive
                             : never // Remove all primitive types of union types.
@@ -43,7 +53,7 @@ namespace DeepStrictObjectKeys {
                 ? // Handle arrays containing objects
                   | P
                     // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
-                    | `${P}${Joiner['array']}${Joiner['object']}${Infer<Element, Joiner, false>}`
+                    | `${P}${Joiner['array']}${Joiner['object']}${DistributeInfer<Element, Joiner, false>}`
                 : Target[P] extends Array<infer _Element>
                   ? // Handle arrays containing primitives
                     Equal<IsSafe, true> extends true

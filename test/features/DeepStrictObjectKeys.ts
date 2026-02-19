@@ -966,3 +966,88 @@ export function test_types_deep_strict_object_keys_glob_deep_nested() {
   type Answer = Equal<'a.b.*' extends Keys ? true : false, true>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that DeepStrictObjectKeys returns never for an empty tuple.
+ */
+export function test_types_deep_strict_object_keys_empty_tuple() {
+  type Question = DeepStrictObjectKeys<[]>;
+  type Answer = Equal<Question, never>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys returns '[*]' for a single-element primitive tuple.
+ */
+export function test_types_deep_strict_object_keys_primitive_tuple() {
+  type Question = DeepStrictObjectKeys<['a']>;
+  type Answer = Equal<Question, '[*]'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys returns '[*]' for a multi-element primitive tuple.
+ */
+export function test_types_deep_strict_object_keys_multi_primitive_tuple() {
+  type Question = DeepStrictObjectKeys<[string, number]>;
+  type Answer = Equal<Question, '[*]'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys returns '[*]' for a readonly primitive tuple.
+ */
+export function test_types_deep_strict_object_keys_readonly_primitive_tuple() {
+  type Question = DeepStrictObjectKeys<readonly ['a']>;
+  type Answer = Equal<Question, '[*]'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys returns correct keys for a tuple of objects
+ * with the same shape.
+ */
+export function test_types_deep_strict_object_keys_same_shape_object_tuple() {
+  type Question = DeepStrictObjectKeys<[{ a: 1 }, { a: 2 }]>;
+  type Answer = Equal<Question, '[*]' | '[*].a' | '[*].*'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys returns correct keys for a heterogeneous tuple
+ * where elements have different shapes.
+ */
+export function test_types_deep_strict_object_keys_heterogeneous_object_tuple() {
+  type Question = DeepStrictObjectKeys<[{ a: 1 }, { b: 2 }]>;
+  type Answer = Equal<Question, '[*]' | '[*].a' | '[*].b' | '[*].*'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys correctly recurses into nested tuple elements
+ * when the tuple is a property of an object.
+ */
+export function test_types_deep_strict_object_keys_nested_heterogeneous_tuple() {
+  type Question = DeepStrictObjectKeys<{ items: [{ a: 1 }, { b: 2 }] }>;
+  type Answer = Equal<Question, '*' | 'items' | 'items[*].a' | 'items[*].b' | 'items[*].*'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys handles a nested same-shape object tuple.
+ */
+export function test_types_deep_strict_object_keys_nested_same_shape_tuple() {
+  type Question = DeepStrictObjectKeys<{ items: [{ a: 1 }, { a: 2 }] }>;
+  type Answer = Equal<Question, '*' | 'items' | 'items[*].a' | 'items[*].*'>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictObjectKeys handles a nested primitive tuple
+ * (no deeper recursion needed).
+ */
+export function test_types_deep_strict_object_keys_nested_primitive_tuple() {
+  type Question = DeepStrictObjectKeys<{ items: [string, number] }>;
+  type Answer = Equal<Question, '*' | 'items'>;
+  ok(typia.random<Answer>());
+}
