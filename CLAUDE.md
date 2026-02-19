@@ -106,28 +106,43 @@ export function test_types_deep_strict_pick_nested() {
 }
 ```
 
+## PR 체크리스트
+
+PR을 생성하기 전에 **반드시** 다음을 수행합니다:
+
+1. `npm run build:test && npm run test` — 모든 테스트 통과 확인
+2. **`npm run prettier`** — 코드 포매팅 (필수, 빠뜨리지 말 것)
+3. 커밋 및 푸시
+
 ## Git Conventions
 
 ### 브랜치 규칙
 
 - 기본 브랜치: `main`
-- 기능 브랜치: `feature/<name>`, `fix/<name>`, `docs/<name>`
+- 기능 브랜치: `kakasoo/<name>` (예: `kakasoo/deep-strict-flat`, `kakasoo/fix-deep-strict-pick`)
 
 ### 커밋 메시지
 
 영어로 작성하며 다음 prefix를 사용합니다:
 
-| Prefix | 용도 |
-|--------|------|
-| `feat` | 새로운 타입/함수 추가 |
-| `fix` | 타입 버그 수정 |
-| `test` | 테스트 추가/수정 |
-| `docs` | 문서/주석 변경 |
-| `refactor` | 리팩토링 |
-| `style` | 코드 포맷팅 |
-| `chore` | 빌드, 설정 변경 |
+| Prefix | 용도 | 예시 |
+|--------|------|------|
+| `feat` | 새로운 타입/함수 추가 | `feat: add glob (*) pattern to DeepStrictObjectKeys for wildcard key selection` |
+| `fix` | 타입 버그 수정 | `fix: support readonly array type` |
+| `test` | 테스트 추가/수정 | `test: add comprehensive test coverage for all types and functions` |
+| `docs` | 문서/주석 변경 | `docs: rewrite README with installation, quick start, and full API coverage` |
+| `refactor` | 리팩토링 | `refactor: extract to isMatched function` |
+| `style` | 코드 포맷팅 | `style: remove unnecessary type` |
+| `chore` | 빌드, 설정 변경 | `chore: update test code command` |
+| `ci` | CI/CD 변경 | `ci: add test step before npm publish` |
 
-형식: `<prefix>: <영어 설명>`
+형식: `<prefix>: <소문자로 시작하는 영어 설명>`
+
+규칙:
+- prefix 뒤에 콜론과 공백 (`: `)
+- 설명은 소문자로 시작, 마침표 없이 끝냄
+- 코드 참조 시 백틱 사용 가능 (예: `` chore: add detailed comments for `DeepStrictObjectKeys` ``)
+- 한 줄로 작성, 무엇을 했는지 간결하게 기술
 
 ## CI/CD
 

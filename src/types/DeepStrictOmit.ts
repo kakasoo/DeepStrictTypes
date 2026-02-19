@@ -15,29 +15,31 @@ namespace DeepStrictOmit {
    * @template T - The object type to omit keys from
    * @template K - The dot-notation key paths to omit (must be valid keys of `T`)
    */
-  export type Infer<T extends object, K extends DeepStrictObjectKeys<T>> = [K] extends [never]
-    ? T
-    : {
-        [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
-          ? key extends string
-            ? Element extends Date
+  export type Infer<T extends object, K extends DeepStrictObjectKeys<T>> = '*' extends K
+    ? {}
+    : [K] extends [never]
+      ? T
+      : {
+          [key in keyof T as key extends K ? never : key]: T[key] extends Array<infer Element extends object>
+            ? key extends string
+              ? Element extends Date
+                ? Array<Element>
+                : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
+                  ? Array<Infer<Element, GetElementMember<K, key>>>
+                  : Array<Element>
+              : never
+            : T[key] extends Array<infer Element>
               ? Array<Element>
-              : GetElementMember<K, key> extends DeepStrictObjectKeys<Element>
-                ? Array<Infer<Element, GetElementMember<K, key>>>
-                : Array<Element>
-            : never
-          : T[key] extends Array<infer Element>
-            ? Array<Element>
-            : T[key] extends object
-              ? key extends string
-                ? T[key] extends Date
-                  ? T[key]
-                  : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
-                    ? Infer<T[key], GetElementMember<K, key>>
-                    : T[key]
-                : never
-              : T[key];
-      };
+              : T[key] extends object
+                ? key extends string
+                  ? T[key] extends Date
+                    ? T[key]
+                    : GetElementMember<K, key> extends DeepStrictObjectKeys<T[key]>
+                      ? Infer<T[key], GetElementMember<K, key>>
+                      : T[key]
+                  : never
+                : T[key];
+        };
 }
 
 /**
@@ -57,8 +59,11 @@ namespace DeepStrictOmit {
  * type Example3 = DeepStrictOmit<{ a: 1 }[], "[*].a">; // {}[]
  * ```
  */
-export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> =
-  T extends Array<infer Element extends object>
+export type DeepStrictOmit<T extends object, K extends DeepStrictObjectKeys<T>> = '*' extends K
+  ? T extends Array<any>
+    ? never[]
+    : {}
+  : T extends Array<infer Element extends object>
     ? Array<
         DeepStrictOmit<
           Element,

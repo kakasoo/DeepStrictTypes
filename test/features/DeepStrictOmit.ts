@@ -136,10 +136,7 @@ export function test_types_deep_strict_omit_all_properties() {
  * Tests that DeepStrictOmit correctly omits a nested property from array elements.
  */
 export function test_types_deep_strict_omit_nested_array_property() {
-  type Question = DeepStrictOmit<
-    { items: { id: number; name: string }[] },
-    'items[*].id'
-  >;
+  type Question = DeepStrictOmit<{ items: { id: number; name: string }[] }, 'items[*].id'>;
   type IsAnswer = Equal<Question, { items: { name: string }[] }>;
   ok(typia.random<IsAnswer>());
 }
@@ -157,10 +154,7 @@ export function test_types_deep_strict_omit_root_array() {
  * Tests that DeepStrictOmit works at 3 depth levels.
  */
 export function test_types_deep_strict_omit_three_depth() {
-  type Question = DeepStrictOmit<
-    { a: { b: { c: number; d: string } } },
-    'a.b.c'
-  >;
+  type Question = DeepStrictOmit<{ a: { b: { c: number; d: string } } }, 'a.b.c'>;
   type IsAnswer = Equal<Question, { a: { b: { d: string } } }>;
   ok(typia.random<IsAnswer>());
 }
@@ -169,10 +163,7 @@ export function test_types_deep_strict_omit_three_depth() {
  * Tests that DeepStrictOmit preserves Date types without recursing.
  */
 export function test_types_deep_strict_omit_preserves_date() {
-  type Question = DeepStrictOmit<
-    { created: Date; name: string; updated: Date },
-    'name'
-  >;
+  type Question = DeepStrictOmit<{ created: Date; name: string; updated: Date }, 'name'>;
   type IsAnswer = Equal<Question, { created: Date; updated: Date }>;
   ok(typia.random<IsAnswer>());
 }
@@ -181,10 +172,7 @@ export function test_types_deep_strict_omit_preserves_date() {
  * Tests that DeepStrictOmit can omit multiple nested keys simultaneously.
  */
 export function test_types_deep_strict_omit_multiple_nested() {
-  type Question = DeepStrictOmit<
-    { a: { b: number; c: string; d: boolean } },
-    'a.b' | 'a.d'
-  >;
+  type Question = DeepStrictOmit<{ a: { b: number; c: string; d: boolean } }, 'a.b' | 'a.d'>;
   type IsAnswer = Equal<Question, { a: { c: string } }>;
   ok(typia.random<IsAnswer>());
 }
@@ -195,5 +183,23 @@ export function test_types_deep_strict_omit_multiple_nested() {
 export function test_types_deep_strict_omit_simple_single() {
   type Question = DeepStrictOmit<{ a: number; b: string }, 'a'>;
   type IsAnswer = Equal<Question, { b: string }>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit with '*' returns empty object.
+ */
+export function test_types_deep_strict_omit_glob_all() {
+  type Question = DeepStrictOmit<{ a: number; b: string }, '*'>;
+  type IsAnswer = Equal<Question, {}>;
+  ok(typia.random<IsAnswer>());
+}
+
+/**
+ * Tests that DeepStrictOmit with 'a.*' omits all children of a.
+ */
+export function test_types_deep_strict_omit_glob_nested() {
+  type Question = DeepStrictOmit<{ a: { b: 1; c: 2 }; d: 3 }, 'a.*'>;
+  type IsAnswer = Equal<Question, { a: {}; d: 3 }>;
   ok(typia.random<IsAnswer>());
 }

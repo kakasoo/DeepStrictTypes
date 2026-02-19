@@ -1,6 +1,7 @@
 import type { DeepStrictObjectKeys } from './DeepStrictObjectKeys';
 import type { DeepStrictOmit } from './DeepStrictOmit';
 import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
+import type { ExpandGlob } from './ExpandGlob';
 import type { RemoveAfterDot } from './RemoveAfterDot';
 import type { RemoveLastProperty } from './RemoveLastProperty';
 
@@ -23,10 +24,15 @@ import type { RemoveLastProperty } from './RemoveLastProperty';
  * type Example3 = DeepStrictPick<{ a: 1 }[], "[*].a">; // { a: 1 }[]
  * ```
  */
-export type DeepStrictPick<T extends object, K extends DeepStrictObjectKeys<T>> = DeepStrictOmit<
-  T,
-  Exclude<
-    DeepStrictObjectKeys<T>, //
-    K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K>
-  >
->;
+export type DeepStrictPick<T extends object, K extends DeepStrictObjectKeys<T>> = '*' extends K
+  ? T
+  : DeepStrictOmit<
+      T,
+      Exclude<
+        Exclude<
+          DeepStrictObjectKeys<T>,
+          K | RemoveLastProperty<K> | RemoveAfterDot<DeepStrictUnbrand<T>, K> | ExpandGlob<K>
+        >,
+        '*' | `${string}.*`
+      >
+    >;

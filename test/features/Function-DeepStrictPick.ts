@@ -219,9 +219,7 @@ interface TripleArrayNesting {
  * Tests triple array nesting: 'categories[*].items[*].variants[*].sku'
  */
 export function test_functions_deepStrictPick_triple_array_nesting() {
-  typia.assertEquals(
-    deepStrictPick(typia.random<TripleArrayNesting>(), 'categories[*].items[*].variants[*].sku'),
-  );
+  typia.assertEquals(deepStrictPick(typia.random<TripleArrayNesting>(), 'categories[*].items[*].variants[*].sku'));
 }
 
 /**
@@ -229,9 +227,7 @@ export function test_functions_deepStrictPick_triple_array_nesting() {
  * (picks the full items sub-tree including variants)
  */
 export function test_functions_deepStrictPick_triple_nesting_mid_level() {
-  typia.assertEquals(
-    deepStrictPick(typia.random<TripleArrayNesting>(), 'categories[*].items'),
-  );
+  typia.assertEquals(deepStrictPick(typia.random<TripleArrayNesting>(), 'categories[*].items'));
 }
 
 /**
@@ -259,18 +255,14 @@ interface MixedArrayObject {
  * 'settings.notifications.channels[*].type'
  */
 export function test_functions_deepStrictPick_mixed_object_array_leaf() {
-  typia.assertEquals(
-    deepStrictPick(typia.random<MixedArrayObject>(), 'settings.notifications.channels[*].type'),
-  );
+  typia.assertEquals(deepStrictPick(typia.random<MixedArrayObject>(), 'settings.notifications.channels[*].type'));
 }
 
 /**
  * Tests picking an object sibling of an array: 'settings.notifications.frequency'
  */
 export function test_functions_deepStrictPick_object_sibling_of_array() {
-  typia.assertEquals(
-    deepStrictPick(typia.random<MixedArrayObject>(), 'settings.notifications.frequency'),
-  );
+  typia.assertEquals(deepStrictPick(typia.random<MixedArrayObject>(), 'settings.notifications.frequency'));
 }
 
 interface RootArrayNested {
@@ -287,12 +279,7 @@ interface RootArrayNested {
  * Tests root array with nested array access: '[*].user.posts[*].title'
  */
 export function test_functions_deepStrictPick_root_array_with_nested_array() {
-  typia.assertEquals(
-    deepStrictPick(
-      typia.random<RootArrayNested[] & tags.MinItems<1>>(),
-      '[*].user.posts[*].title',
-    ),
-  );
+  typia.assertEquals(deepStrictPick(typia.random<RootArrayNested[] & tags.MinItems<1>>(), '[*].user.posts[*].title'));
 }
 
 /**

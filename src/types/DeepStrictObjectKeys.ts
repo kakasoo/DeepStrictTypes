@@ -19,45 +19,47 @@ namespace DeepStrictObjectKeys {
     P extends keyof Target = Exclude<keyof Target, keyof []>,
   > = [Target] extends [never]
     ? never
-    : P extends string
-      ? IsUnion<Target[P]> extends true
-        ? Equal<IsSafe, true> extends true
-          ? P // In safe mode, only return the key itself for union types
-          : // In unsafe mode, explore union types that mix primitives and objects
-            | P
-              | (Target[P] extends infer E
-                  ? E extends ValueType
-                    ? P // For primitive types, just return the key
-                    : E extends object
-                      ? E extends Array<infer _Element extends object>
-                        ? // For arrays of objects, add array notation and recurse into elements
-                          | P
-                            // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
-                            | `${P}${Joiner['array']}${Joiner['object']}${Infer<_Element, Joiner, IsSafe>}` // recursive
-                        : // For regular objects, add object notation and recurse
-                          `${P}${Joiner['object']}${Infer<E, Joiner, IsSafe>}` // recursive
-                      : never // Remove all primitive types of union types.
-                  : never)
-        : Target[P] extends Array<infer Element extends object>
-          ? // Handle arrays containing objects
-            | P
-              // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
-              | `${P}${Joiner['array']}${Joiner['object']}${Infer<Element, Joiner, false>}`
-          : Target[P] extends Array<infer _Element>
-            ? // Handle arrays containing primitives
-              Equal<IsSafe, true> extends true
-              ? P
-              : P | never // `${P}[*]`
-            : Target[P] extends ValueType
-              ? P // For primitive values, just return the key
-              : IsAny<Target[P]> extends true
-                ? P // For 'any' type, return the key
-                : Target[P] extends object
-                  ? Target[P] extends Record<string, never>
-                    ? `${P}` // For empty objects, just return the key
-                    : `${P}` | `${P}${Joiner['object']}${Infer<Target[P], Joiner, false>}` // For objects with properties, include both the key and nested paths
-                  : never
-      : never;
+    :
+        | (P extends string
+            ? IsUnion<Target[P]> extends true
+              ? Equal<IsSafe, true> extends true
+                ? P // In safe mode, only return the key itself for union types
+                : // In unsafe mode, explore union types that mix primitives and objects
+                  | P
+                    | (Target[P] extends infer E
+                        ? E extends ValueType
+                          ? P // For primitive types, just return the key
+                          : E extends object
+                            ? E extends Array<infer _Element extends object>
+                              ? // For arrays of objects, add array notation and recurse into elements
+                                | P
+                                  // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
+                                  | `${P}${Joiner['array']}${Joiner['object']}${Infer<_Element, Joiner, IsSafe>}` // recursive
+                              : // For regular objects, add object notation and recurse
+                                `${P}${Joiner['object']}${Infer<E, Joiner, IsSafe>}` // recursive
+                            : never // Remove all primitive types of union types.
+                        : never)
+              : Target[P] extends Array<infer Element extends object>
+                ? // Handle arrays containing objects
+                  | P
+                    // | (Equal<IsSafe, true> extends true ? never : `${P}[*]`) // end of array
+                    | `${P}${Joiner['array']}${Joiner['object']}${Infer<Element, Joiner, false>}`
+                : Target[P] extends Array<infer _Element>
+                  ? // Handle arrays containing primitives
+                    Equal<IsSafe, true> extends true
+                    ? P
+                    : P | never // `${P}[*]`
+                  : Target[P] extends ValueType
+                    ? P // For primitive values, just return the key
+                    : IsAny<Target[P]> extends true
+                      ? P // For 'any' type, return the key
+                      : Target[P] extends object
+                        ? Target[P] extends Record<string, never>
+                          ? `${P}` // For empty objects, just return the key
+                          : `${P}` | `${P}${Joiner['object']}${Infer<Target[P], Joiner, false>}` // For objects with properties, include both the key and nested paths
+                        : never
+            : never)
+        | ([Exclude<keyof Target, keyof []>] extends [never] ? never : '*');
 }
 
 /**

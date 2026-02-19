@@ -33,10 +33,7 @@ export function test_types_deep_strict_merge_nested_objects() {
  * Tests that DeepStrictMerge recursively merges nested objects with overlapping keys (Target wins).
  */
 export function test_types_deep_strict_merge_nested_overlapping() {
-  type Question = DeepStrictMerge<
-    { a: { b: number; c: string } },
-    { a: { b: string; d: boolean } }
-  >;
+  type Question = DeepStrictMerge<{ a: { b: number; c: string } }, { a: { b: string; d: boolean } }>;
   type Answer = Equal<Question, { a: { b: number; c: string; d: boolean } }>;
   ok(typia.random<Answer>());
 }
@@ -54,10 +51,7 @@ export function test_types_deep_strict_merge_array_top_level() {
  * Tests that DeepStrictMerge merges array-typed properties within objects.
  */
 export function test_types_deep_strict_merge_array_property() {
-  type Question = DeepStrictMerge<
-    { items: { a: number }[] },
-    { items: { b: string }[] }
-  >;
+  type Question = DeepStrictMerge<{ items: { a: number }[] }, { items: { b: string }[] }>;
   type Answer = Equal<Question, { items: { a: number; b: string }[] }>;
   ok(typia.random<Answer>());
 }
@@ -75,10 +69,7 @@ export function test_types_deep_strict_merge_array_vs_non_array() {
  * Tests that DeepStrictMerge returns never for property-level array vs non-array mismatch.
  */
 export function test_types_deep_strict_merge_property_array_mismatch() {
-  type Question = DeepStrictMerge<
-    { items: { a: number }[] },
-    { items: { b: string } }
-  >;
+  type Question = DeepStrictMerge<{ items: { a: number }[] }, { items: { b: string } }>;
   type Answer = Equal<Question, { items: never }>;
   ok(typia.random<Answer>());
 }
@@ -87,10 +78,7 @@ export function test_types_deep_strict_merge_property_array_mismatch() {
  * Tests that DeepStrictMerge handles deeply nested structures (3+ levels).
  */
 export function test_types_deep_strict_merge_deeply_nested() {
-  type Question = DeepStrictMerge<
-    { a: { b: { c: number } } },
-    { a: { b: { d: string } } }
-  >;
+  type Question = DeepStrictMerge<{ a: { b: { c: number } } }, { a: { b: { d: string } } }>;
   type Answer = Equal<Question, { a: { b: { c: number; d: string } } }>;
   ok(typia.random<Answer>());
 }
@@ -99,10 +87,7 @@ export function test_types_deep_strict_merge_deeply_nested() {
  * Tests that DeepStrictMerge preserves Source-only keys at nested levels.
  */
 export function test_types_deep_strict_merge_source_only_nested() {
-  type Question = DeepStrictMerge<
-    { a: { b: number } },
-    { a: { c: string }; d: boolean }
-  >;
+  type Question = DeepStrictMerge<{ a: { b: number } }, { a: { c: string }; d: boolean }>;
   type Answer = Equal<Question, { a: { b: number; c: string }; d: boolean }>;
   ok(typia.random<Answer>());
 }
