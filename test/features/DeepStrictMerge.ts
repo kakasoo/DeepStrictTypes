@@ -118,3 +118,44 @@ export function test_types_deep_strict_merge_nested_date() {
   type Answer = Equal<Question, { a: { createdAt: Date; b: number; updatedAt: Date; c: string } }>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that a Source-only key with a Date value is taken directly from Source.
+ * This proves the dead-code branch (re-checking `key extends keyof Target`) was unreachable:
+ * if `key` is only in Source, the result must be `Source[key]` regardless of type.
+ */
+export function test_types_deep_strict_merge_source_only_date() {
+  type Question = DeepStrictMerge<{ a: number }, { createdAt: Date }>;
+  type Answer = Equal<Question, { a: number; createdAt: Date }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that a Source-only key with a nested object value is taken directly from Source.
+ * The dead code attempted to recursively merge Source[key] with Target[key],
+ * but Target[key] doesn't exist for Source-only keys.
+ */
+export function test_types_deep_strict_merge_source_only_nested_object() {
+  type Question = DeepStrictMerge<{ a: number }, { b: { c: string; d: boolean } }>;
+  type Answer = Equal<Question, { a: number; b: { c: string; d: boolean } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that a Source-only key with an array-of-objects value is taken directly from Source.
+ * The dead code attempted to merge array elements, but that's impossible for Source-only keys.
+ */
+export function test_types_deep_strict_merge_source_only_array_of_objects() {
+  type Question = DeepStrictMerge<{ a: number }, { items: { id: number; name: string }[] }>;
+  type Answer = Equal<Question, { a: number; items: { id: number; name: string }[] }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that a Source-only key with a deeply nested object is taken as-is from Source.
+ */
+export function test_types_deep_strict_merge_source_only_deeply_nested_object() {
+  type Question = DeepStrictMerge<{ x: number }, { y: { z: { w: string; v: Date } } }>;
+  type Answer = Equal<Question, { x: number; y: { z: { w: string; v: Date } } }>;
+  ok(typia.random<Answer>());
+}
