@@ -29,21 +29,7 @@ namespace DeepStrictMerge {
           : Target[key] // If `Target` is not an object, take `Target`'s value
         : Target[key] // If `key` is only in `Target`, take `Target`'s value
       : key extends keyof Source
-        ? key extends keyof Target
-          ? Source[key] extends object
-            ? Source[key] extends Date
-              ? Target[key] // Date is a leaf type, Target wins
-              : Target[key] extends object
-                ? Target[key] extends Date
-                  ? Target[key] // Target is Date leaf, preserve as-is
-                  : Target[key] extends Array<infer TE extends object>
-                    ? Source[key] extends Array<infer PE extends object>
-                      ? Array<Infer<TE, PE>> // If both are arrays of objects, merge their elements into a new array
-                      : never // If one is an array and the other is not, merging is not possible
-                    : Infer<Target[key], Source[key]> // If both are objects, merge them recursively
-                : Source[key] // If `Source` is an object but `Target` is not, take `Source`'s value
-            : Source[key] // If `Source` is not an object, take `Source`'s value
-          : Source[key] // If `key` is only in `Source`, take `Source`'s value
+        ? Source[key] // If `key` is only in `Source`, take `Source`'s value
         : never; // If `key` is in neither `Target` nor `Source`, return `never`
   };
 }
