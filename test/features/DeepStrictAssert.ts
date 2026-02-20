@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import typia, { tags } from 'typia';
 import { deepStrictAssert } from '../../src';
 
@@ -129,4 +130,15 @@ export function test_functions_deepStrictAssert_accesses_multiple_nested_array_p
   const resultE = deepStrictAssert(original)('c[*].e');
   typia.assertEquals(resultD);
   typia.assertEquals(resultE);
+}
+
+/**
+ * Tests that deepStrictAssert can access a non-leaf object key without crashing.
+ * This verifies the fix for GitHub issue #19.
+ */
+export function test_functions_deepStrictAssert_accesses_non_leaf_object_key() {
+  const data = { user: { name: 'Alice', age: 30 } };
+  const result = deepStrictAssert(data)('user');
+  ok(result.user.name === 'Alice');
+  ok(result.user.age === 30);
 }
