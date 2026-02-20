@@ -106,6 +106,14 @@ export function test_functions_deepStrictAssert_accesses_nested_object_property(
 }
 
 /**
+ * Tests that deepStrictAssert can access a top-level key whose value is a plain object.
+ */
+export function test_functions_deepStrictAssert_accesses_top_level_object_property() {
+  const original = typia.random<SimpleNested>();
+  typia.assertEquals(deepStrictAssert(original)('user'));
+}
+
+/**
  * Tests that deepStrictAssert throws when accessing a non-existent key.
  */
 export function test_functions_deepStrictAssert_throws_on_invalid_key() {
