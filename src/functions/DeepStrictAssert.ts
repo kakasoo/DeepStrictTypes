@@ -33,7 +33,7 @@ export const deepStrictAssert =
       if (input instanceof Array) {
         const elements = input.map((element) => {
           if (first in element) {
-            if (typeof element[first] === 'object' && element[first] !== null) {
+            if (typeof element[first] === 'object' && element[first] !== null && rest.length > 0) {
               return { [first]: traverse(element[first], rest) };
             }
 
@@ -46,7 +46,7 @@ export const deepStrictAssert =
         return elements;
       } else {
         if (first in input) {
-          if (typeof input[first] === 'object' && input[first] !== null) {
+          if (typeof input[first] === 'object' && input[first] !== null && rest.length > 0) {
             return { [first]: traverse(input[first], rest) };
           }
           return { [first]: input[first] };
