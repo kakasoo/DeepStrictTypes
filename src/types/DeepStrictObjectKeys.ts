@@ -1,5 +1,5 @@
-import { DeepStrictUnbrand } from './DeepStrictUnbrand';
-import { Equal } from './Equal';
+import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
+import type { Equal } from './Equal';
 import type { IsAny } from './IsAny';
 import type { IsUnion } from './IsUnion';
 import type { ValueType } from './ValueType';

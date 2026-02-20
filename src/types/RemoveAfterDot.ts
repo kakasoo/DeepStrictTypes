@@ -1,4 +1,4 @@
-import { ElementOf } from './ElementOf';
+import type { ElementOf } from './ElementOf';
 
 /**
  * @title Type for Generating Wildcard Patterns for Descendant Keys.

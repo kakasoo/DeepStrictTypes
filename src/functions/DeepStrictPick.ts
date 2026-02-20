@@ -1,5 +1,5 @@
-import { DeepStrictObjectKeys } from '../types/DeepStrictObjectKeys';
-import { DeepStrictPick } from '../types/DeepStrictPick';
+import type { DeepStrictObjectKeys } from '../types/DeepStrictObjectKeys';
+import type { DeepStrictPick } from '../types/DeepStrictPick';
 
 /**
  * @title Runtime Function for Type-Safe Deep Property Picking.

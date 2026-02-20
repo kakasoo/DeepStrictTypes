@@ -1,4 +1,4 @@
-import { StringType } from '@kakasoo/proto-typescript';
+import type { StringType } from '@kakasoo/proto-typescript';
 
 /** @internal Converts a union type to an intersection type. */
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;

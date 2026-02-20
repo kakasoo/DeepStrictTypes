@@ -1,4 +1,4 @@
-import { DeepStrictUnbrand } from './DeepStrictUnbrand';
+import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
 
 /**
  * @title Type for Recursively Converting All Date Types to String.

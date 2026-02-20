@@ -1,4 +1,4 @@
-import { DeepStrictObjectKeys } from '../types';
+import type { DeepStrictObjectKeys } from '../types';
 
 /** @internal Removes a leading dot from a string type. e.g., `".foo"` becomes `"foo"`. */
 type RemoveStartWithDot<T extends string> = T extends `.${infer R extends string}` ? R : T;

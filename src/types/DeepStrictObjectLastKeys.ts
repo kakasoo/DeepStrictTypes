@@ -1,4 +1,4 @@
-import { DeepStrictUnbrand } from './DeepStrictUnbrand';
+import type { DeepStrictUnbrand } from './DeepStrictUnbrand';
 import type { IsAny } from './IsAny';
 import type { IsUnion } from './IsUnion';
 import type { ValueType } from './ValueType';
