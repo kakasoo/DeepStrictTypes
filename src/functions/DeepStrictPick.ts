@@ -52,7 +52,7 @@ export const deepStrictPick = <T extends object, K extends DeepStrictObjectKeys<
         return { [first]: input[first] };
       }
 
-      throw new Error(`input doesn\'t has key: ${first}`);
+      throw new Error(`input doesn\'t have key: ${first}`);
     }
   };
 
