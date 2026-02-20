@@ -15,25 +15,33 @@ namespace DeepStrictMerge {
     [key in keyof Target | keyof Source]: key extends keyof Target
       ? key extends keyof Source
         ? Target[key] extends object
-          ? Source[key] extends object
-            ? Target[key] extends Array<infer TE extends object>
-              ? Source[key] extends Array<infer PE extends object>
-                ? Array<Infer<TE, PE>> // If both are arrays of objects, merge their elements into a new array
-                : never // If one is an array and the other is not, merging is not possible
-              : Infer<Target[key], Source[key]> // If both are objects, merge them recursively
-            : Target[key] // If `Target` is an object but `Source` is not, take `Target`'s value
+          ? Target[key] extends Date
+            ? Target[key] // Date is a leaf type, Target wins
+            : Source[key] extends object
+              ? Source[key] extends Date
+                ? Target[key] // Source is Date leaf, Target (non-Date object) wins
+                : Target[key] extends Array<infer TE extends object>
+                  ? Source[key] extends Array<infer PE extends object>
+                    ? Array<Infer<TE, PE>> // If both are arrays of objects, merge their elements into a new array
+                    : never // If one is an array and the other is not, merging is not possible
+                  : Infer<Target[key], Source[key]> // If both are objects, merge them recursively
+              : Target[key] // If `Target` is an object but `Source` is not, take `Target`'s value
           : Target[key] // If `Target` is not an object, take `Target`'s value
         : Target[key] // If `key` is only in `Target`, take `Target`'s value
       : key extends keyof Source
         ? key extends keyof Target
           ? Source[key] extends object
-            ? Target[key] extends object
-              ? Target[key] extends Array<infer TE extends object>
-                ? Source[key] extends Array<infer PE extends object>
-                  ? Array<Infer<TE, PE>> // If both are arrays of objects, merge their elements into a new array
-                  : never // If one is an array and the other is not, merging is not possible
-                : Infer<Target[key], Source[key]> // If both are objects, merge them recursively
-              : Source[key] // If `Source` is an object but `Target` is not, take `Source`'s value
+            ? Source[key] extends Date
+              ? Target[key] // Date is a leaf type, Target wins
+              : Target[key] extends object
+                ? Target[key] extends Date
+                  ? Target[key] // Target is Date leaf, preserve as-is
+                  : Target[key] extends Array<infer TE extends object>
+                    ? Source[key] extends Array<infer PE extends object>
+                      ? Array<Infer<TE, PE>> // If both are arrays of objects, merge their elements into a new array
+                      : never // If one is an array and the other is not, merging is not possible
+                    : Infer<Target[key], Source[key]> // If both are objects, merge them recursively
+                : Source[key] // If `Source` is an object but `Target` is not, take `Source`'s value
             : Source[key] // If `Source` is not an object, take `Source`'s value
           : Source[key] // If `key` is only in `Source`, take `Source`'s value
         : never; // If `key` is in neither `Target` nor `Source`, return `never`
