@@ -60,7 +60,7 @@ export function deepStrictObjectKeys<
   for (const key of keys) {
     if (key in target) {
       const value = (target as any)[key];
-      if (typeof value === 'object' && value !== null) {
+      if (typeof value === 'object' && value !== null && !(value instanceof Date)) {
         const children = deepStrictObjectKeys(value).map((el) => `${key}.${el}`);
         response.push(...children);
       }

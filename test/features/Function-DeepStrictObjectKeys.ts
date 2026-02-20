@@ -99,6 +99,86 @@ export function test_functions_deep_strict_object_keys_union_date_string() {
 }
 
 /**
+ * Tests that deepStrictObjectKeys treats Date as a leaf when nested inside an object.
+ * Verifies that keys like "meta.createdAt.toISOString" are NOT produced.
+ */
+export function test_functions_deep_strict_object_keys_date_nested_in_object() {
+  interface Target {
+    meta: {
+      createdAt: Date;
+      updatedAt: Date;
+      label: string;
+    };
+    id: number;
+  }
+  const target = typia.random<Target>();
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
+}
+
+/**
+ * Tests that deepStrictObjectKeys treats Date as a leaf inside arrays.
+ * Ensures array elements containing Date properties do not recurse into Date methods.
+ */
+export function test_functions_deep_strict_object_keys_date_in_array_elements() {
+  interface Target {
+    events: {
+      name: string;
+      occurredAt: Date;
+    }[];
+  }
+  const target: Target = {
+    events: [
+      { name: 'login', occurredAt: new Date() },
+      { name: 'logout', occurredAt: new Date() },
+    ],
+  };
+
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(!key.includes('toISOString'), `Date method leaked into keys: ${key}`);
+    ok(!key.includes('getTime'), `Date method leaked into keys: ${key}`);
+    ok(!key.includes('getFullYear'), `Date method leaked into keys: ${key}`);
+  }
+}
+
+/**
+ * Tests that deepStrictObjectKeys handles objects with multiple Date fields at different depths.
+ */
+export function test_functions_deep_strict_object_keys_multiple_dates_at_different_depths() {
+  interface Target {
+    topDate: Date;
+    nested: {
+      midDate: Date;
+      deep: {
+        bottomDate: Date;
+        value: number;
+      };
+    };
+  }
+  const target: Target = {
+    topDate: new Date(),
+    nested: {
+      midDate: new Date(),
+      deep: {
+        bottomDate: new Date(),
+        value: 42,
+      },
+    },
+  };
+
+  const elements = typia.misc.literals<DeepStrictObjectKeys<Target, { array: '[*]'; object: '.' }, false>>();
+  const keys = deepStrictObjectKeys(target);
+  for (const key of keys) {
+    ok(elements.includes(key), `${key} is not in ${JSON.stringify(elements)}`);
+  }
+}
+
+/**
  * Tests that deepStrictObjectKeys correctly handles branding type of string (typia).
  */
 export function test_functions_deep_strict_object_keys_branding_string_typia() {
