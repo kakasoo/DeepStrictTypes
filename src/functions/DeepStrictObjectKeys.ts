@@ -22,7 +22,7 @@ type Replace<S extends string> = S extends '[*]'
 /** @internal Removes glob patterns (e.g., `'*'`, `'a.*'`) from a string union. */
 type WithoutGlob<K extends string> = K extends '*' | `${string}.*` ? never : K;
 
-type ReturnType<
+type DeepStrictObjectKeysResult<
   Target extends object,
   Joiner extends { array: string; object: string } = { array: '[*]'; object: '.' },
 > = [Target] extends [never]
@@ -52,12 +52,7 @@ type ReturnType<
 export function deepStrictObjectKeys<
   Target extends object,
   Joiner extends { array: string; object: string } = { array: '[*]'; object: '.' },
->(target: Target): ReturnType<Target, Joiner> {
-  let joiner: Joiner = { array: '[*]', object: '.' } as Joiner;
-  if (joiner === undefined) {
-    joiner = { array: '[*]', object: '.' } as Joiner;
-  }
-
+>(target: Target): DeepStrictObjectKeysResult<Target, Joiner> {
   const response = [];
   const keys = Object.keys(target);
   response.push(...keys);
@@ -72,5 +67,5 @@ export function deepStrictObjectKeys<
     }
   }
 
-  return Array.from(new Set(response)) as ReturnType<Target, Joiner>;
+  return Array.from(new Set(response)) as DeepStrictObjectKeysResult<Target, Joiner>;
 }
