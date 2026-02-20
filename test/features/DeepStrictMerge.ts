@@ -159,3 +159,66 @@ export function test_types_deep_strict_merge_source_only_deeply_nested_object() 
   type Answer = Equal<Question, { x: number; y: { z: { w: string; v: Date } } }>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that Date is preserved when Target has Date and Source has a non-Date object at the same key.
+ * Target wins because DeepStrictMerge gives Target precedence, and Date is treated as a leaf.
+ */
+export function test_types_deep_strict_merge_target_date_vs_source_object() {
+  type Question = DeepStrictMerge<{ d: Date }, { d: { x: number } }>;
+  type Answer = Equal<Question, { d: Date }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Target (non-Date object) wins when Source has Date at the same key.
+ * DeepStrictMerge gives Target precedence.
+ */
+export function test_types_deep_strict_merge_target_object_vs_source_date() {
+  type Question = DeepStrictMerge<{ d: { x: number } }, { d: Date }>;
+  type Answer = Equal<Question, { d: { x: number } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that Date properties are preserved inside array element merging.
+ */
+export function test_types_deep_strict_merge_date_in_array_elements() {
+  type Question = DeepStrictMerge<
+    { items: { createdAt: Date; a: number }[] },
+    { items: { updatedAt: Date; b: string }[] }
+  >;
+  type Answer = Equal<Question, { items: { createdAt: Date; a: number; updatedAt: Date; b: string }[] }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests Date preservation in deeply nested objects (3+ levels) mixed with other properties.
+ */
+export function test_types_deep_strict_merge_date_deeply_nested_mixed() {
+  type Question = DeepStrictMerge<
+    { a: { b: { c: Date; d: number }; e: Date } },
+    { a: { b: { c: Date; f: string }; e: { g: boolean } } }
+  >;
+  type Answer = Equal<Question, { a: { b: { c: Date; d: number; f: string }; e: Date } }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that multiple Date properties at different nesting levels are all preserved correctly.
+ */
+export function test_types_deep_strict_merge_multiple_dates_various_levels() {
+  type Question = DeepStrictMerge<
+    { created: Date; meta: { updated: Date; info: { archived: Date; name: string } } },
+    { deleted: Date; meta: { published: Date; info: { archived: Date; desc: string } } }
+  >;
+  type Answer = Equal<
+    Question,
+    {
+      created: Date;
+      meta: { updated: Date; info: { archived: Date; name: string; desc: string }; published: Date };
+      deleted: Date;
+    }
+  >;
+  ok(typia.random<Answer>());
+}
