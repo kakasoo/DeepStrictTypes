@@ -51,12 +51,20 @@ test/
 | 타입 | 역할 |
 |------|------|
 | `DeepStrictObjectKeys<T>` | 중첩 객체의 모든 키를 dot notation으로 추출 (`a.b`, `c[*].d`) |
-| `DeepStrictOmit<T, K>` | 중첩 키를 기준으로 deep omit |
-| `DeepStrictPick<T, K>` | 중첩 키를 기준으로 deep pick |
+| `DeepStrictOmit<T, K>` | 중첩 키를 기준으로 deep omit (존재하지 않는 키 사용 시 컴파일 에러) |
+| `DeepStrictPick<T, K>` | 중첩 키를 기준으로 deep pick (존재하지 않는 키 사용 시 컴파일 에러) |
 | `DeepStrictMerge<T, U>` | 두 객체를 deep merge |
+| `DeepOmit<T, K>` | 중첩 키를 기준으로 deep omit (non-strict, 잘못된 키 무시) |
+| `DeepPick<T, K>` | 중첩 키를 기준으로 deep pick (non-strict, 잘못된 키 무시) |
+| `DeepMerge<T, U>` | 두 객체를 deep merge (source wins, spread 패턴) |
 | `DeepDateToString<T>` | Date 타입을 string으로 재귀 변환 |
 | `DeepStrictUnbrand<T>` | 브랜드 타입 제거 |
+| `GetType<T, K>` | 중첩 경로의 타입 추출 (`GetType<{a: {b: 1}}, "a.b">` → `1`) |
+| `StringToDeepObject<T>` | 콤마 구분 dot 표기법 → 중첩 객체 타입 변환 |
+| `ElementOf<T>` | 배열 요소 타입 추출 |
 | `Equal<A, B>` | 두 타입의 동등성 검사 (테스트용) |
+| `IsAny<T>` | any 타입 체크 |
+| `IsUnion<T>` | 유니온 타입 체크 |
 
 ### 핵심 함수
 
@@ -64,6 +72,7 @@ test/
 |------|------|
 | `deepStrictAssert<T>(input)<K>(key)` | 런타임에서 특정 키만 추출 (타입 안전) |
 | `deepStrictObjectKeys<T>(input)` | 런타임에서 모든 중첩 키 문자열 배열 반환 |
+| `deepStrictPick<T>(input)<K>(keys)` | 런타임에서 중첩 키 기준으로 pick (타입 안전) |
 
 ## Coding Conventions
 
