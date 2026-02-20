@@ -91,3 +91,30 @@ export function test_types_deep_strict_merge_source_only_nested() {
   type Answer = Equal<Question, { a: { b: number; c: string }; d: boolean }>;
   ok(typia.random<Answer>());
 }
+
+/**
+ * Tests that DeepStrictMerge preserves Date properties from both Target and Source.
+ */
+export function test_types_deep_strict_merge_date_preserved() {
+  type Question = DeepStrictMerge<{ createdAt: Date }, { updatedAt: Date }>;
+  type Answer = Equal<Question, { createdAt: Date; updatedAt: Date }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictMerge preserves Date when both Target and Source have the same Date key.
+ */
+export function test_types_deep_strict_merge_overlapping_date() {
+  type Question = DeepStrictMerge<{ date: Date }, { date: Date }>;
+  type Answer = Equal<Question, { date: Date }>;
+  ok(typia.random<Answer>());
+}
+
+/**
+ * Tests that DeepStrictMerge preserves Date in nested objects.
+ */
+export function test_types_deep_strict_merge_nested_date() {
+  type Question = DeepStrictMerge<{ a: { createdAt: Date; b: number } }, { a: { updatedAt: Date; c: string } }>;
+  type Answer = Equal<Question, { a: { createdAt: Date; b: number; updatedAt: Date; c: string } }>;
+  ok(typia.random<Answer>());
+}
